@@ -1,0 +1,17 @@
+plugins {
+    id 'biz.aQute.bnd.builder'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+configurations {
+    [ compileClasspath, testCompileClasspath ].forEach {
+        it.exclude module: 'kotlin-stdlib-jdk8'
+    }
+}
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    api "org.jetbrains:annotations:$jetbrains_annotations_version"
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
+}

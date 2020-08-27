@@ -1,0 +1,27 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id 'biz.aQute.bnd.builder' version bnd_version
+        id 'org.jetbrains.kotlin.jvm' version kotlin_version
+        id 'com.gradle.enterprise' version '3.4.1'
+    }
+}
+
+plugins {
+    id 'com.gradle.enterprise'
+}
+
+rootProject.name = 'OSGi example'
+
+include 'api'
+include 'impl'
+
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+        termsOfServiceAgree = 'yes'
+    }
+}

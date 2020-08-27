@@ -1,0 +1,44 @@
+import static org.gradle.api.JavaVersion.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id 'base'
+}
+
+subprojects {
+    group 'com.example.osgi'
+    version = '1.0.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        sourceCompatibility = VERSION_1_8
+        targetCompatibility = VERSION_1_8
+    }
+
+    tasks.withType(KotlinCompile).configureEach {
+        kotlinOptions {
+            languageVersion = '1.4'
+            apiVersion = '1.4'
+            jvmTarget = VERSION_1_8
+            freeCompilerArgs = ['-Xjvm-default=enable']
+            //allWarningsAsErrors = true
+        }
+    }
+
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+
+        // Prevent the project from creating temporary files outside of the build directory.
+        systemProperty 'java.io.tmpdir', buildDir.absolutePath
+    }
+}
+
+wrapper {
+    gradleVersion = '6.6.1'
+    distributionType = Wrapper.DistributionType.ALL
+}
+

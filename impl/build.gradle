@@ -1,0 +1,44 @@
+import aQute.bnd.gradle.TestOSGi
+
+plugins {
+    id 'biz.aQute.bnd.builder'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+configurations {
+    [ compileClasspath, testCompileClasspath ].forEach {
+        it.exclude module: 'kotlin-stdlib-jdk8'
+    }
+}
+
+dependencies {
+    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    api "org.jetbrains:annotations:$jetbrains_annotations_version"
+    api project(':api')
+
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
+    compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
+    implementation "org.osgi:osgi.promise:$osgi_version"
+
+    testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+
+    testImplementation "biz.aQute.bnd:biz.aQute.tester:$bnd_version"
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes(
+            '-classforname': 'false',
+        )
+    }
+}
+
+tasks.register('testOSGi', TestOSGi) {
+    bndrun = 'boop'
+}

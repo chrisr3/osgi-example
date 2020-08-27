@@ -1,0 +1,17 @@
+# General build files
+**/build/*
+
+.gradle
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+**/out/
+
+# vim
+*.swp
+*.swn
+*.swo
