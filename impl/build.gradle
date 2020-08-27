@@ -1,3 +1,4 @@
+import aQute.bnd.gradle.Bundle
 import aQute.bnd.gradle.TestOSGi
 
 plugins {
@@ -6,8 +7,21 @@ plugins {
     id 'java-library'
 }
 
+sourceSets {
+    integrationTest {
+        kotlin {
+            srcDirs = [ 'src/integration-test/kotlin' ]
+        }
+    }
+}
+
 configurations {
-    [ compileClasspath, testCompileClasspath ].forEach {
+    testCompileOnly.extendsFrom compileOnly
+    integrationTestApi.extendsFrom testApi
+    integrationTestCompileOnly.extendsFrom testCompileOnly
+    integrationTestImplementation.extendsFrom testImplementation
+
+    [ compileClasspath, testCompileClasspath, integrationTestCompileClasspath ].forEach {
         it.exclude module: 'kotlin-stdlib-jdk8'
     }
 }
@@ -31,14 +45,19 @@ dependencies {
     testImplementation "biz.aQute.bnd:biz.aQute.tester:$bnd_version"
 }
 
-tasks.named('jar', Jar) {
+def testingBundle = tasks.register('testingBundle', Bundle) {
+    archiveClassifier = 'tests'
+    from sourceSets.integrationTest.output
+
     manifest {
-        attributes(
-            '-classforname': 'false',
-        )
+        attributes('Test-Cases': '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}')
     }
 }
 
 tasks.register('testOSGi', TestOSGi) {
     bndrun = 'boop'
+}
+
+artifacts {
+    archives testingBundle.flatMap { it.archiveFile }
 }
