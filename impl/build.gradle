@@ -1,4 +1,5 @@
 import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Resolve
 import aQute.bnd.gradle.TestOSGi
 
 plugins {
@@ -20,6 +21,7 @@ configurations {
     integrationTestApi.extendsFrom testApi
     integrationTestCompileOnly.extendsFrom testCompileOnly
     integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 
     [ compileClasspath, testCompileClasspath, integrationTestCompileClasspath ].forEach {
         it.exclude module: 'kotlin-stdlib-jdk8'
@@ -27,7 +29,6 @@ configurations {
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
     api "org.jetbrains:annotations:$jetbrains_annotations_version"
     api project(':api')
 
@@ -47,7 +48,10 @@ dependencies {
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
 
-    testImplementation "biz.aQute.bnd:biz.aQute.tester:$bnd_version"
+    integrationTestRuntimeOnly "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    integrationTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
 }
 
 //compile 'org.apache.felix:org.apache.felix.main:5.4.0',
@@ -59,14 +63,28 @@ dependencies {
 def testingBundle = tasks.register('testingBundle', Bundle) {
     archiveClassifier = 'tests'
     from sourceSets.integrationTest.output
+    sourceSet = sourceSets.integrationTest
 
     manifest {
+        // Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
+        attributes('Bundle-SymbolicName': '\${task.archiveBaseName}-\${task.archiveClassifier}')
         attributes('Test-Cases': '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}')
     }
 }
 
-tasks.register('testOSGi', TestOSGi) {
-    bndrun = 'boop'
+def resolve = tasks.register('resolve', Resolve) {
+    bundles sourceSets.integrationTest.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+def testOSGi = tasks.register('testOSGi', TestOSGi) {
+    mustRunAfter resolve
+    bundles sourceSets.integrationTest.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+def check = tasks.named('check') {
+    dependsOn resolve, testOSGi
 }
 
 artifacts {
