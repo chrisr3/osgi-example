@@ -46,6 +46,7 @@ dependencies {
 def testingBundle = tasks.register('testingBundle', Bundle) {
     archiveClassifier = 'tests'
     from sourceSets.integrationTest.output
+    sourceSet = sourceSets.integrationTest
 
     manifest {
         attributes('Test-Cases': '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}')
