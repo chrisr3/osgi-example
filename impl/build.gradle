@@ -38,20 +38,16 @@ dependencies {
     implementation "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
     implementation "org.osgi:osgi.promise:$osgi_version"
+    implementation "org.slf4j:slf4j-api:$slf4j_version"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 
-    integrationTestRuntimeOnly "biz.aQute.bnd:biz.aQute.tester.junit-platform:$bnd_version"
-    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
-    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
-
-    integrationTestRuntimeOnly "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
     integrationTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
 }
 
 //compile 'org.apache.felix:org.apache.felix.main:5.4.0',
