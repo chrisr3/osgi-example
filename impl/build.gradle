@@ -19,7 +19,6 @@ sourceSets {
 configurations {
     integrationTestApi.extendsFrom testApi
     integrationTestImplementation.extendsFrom testImplementation
-    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 
     [ runtimeClasspath, testRuntimeClasspath, integrationTestRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {
@@ -44,12 +43,14 @@ dependencies {
     testRuntimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 
     integrationTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    integrationTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
     integrationTestRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
+    integrationTestRuntimeOnly "org.osgi:slf4j.osgi:$osgi_slf4j_version"
 }
 
 //compile 'org.apache.felix:org.apache.felix.main:5.4.0',
