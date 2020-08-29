@@ -29,15 +29,13 @@ configurations {
 }
 
 dependencies {
+    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
     api "org.jetbrains:annotations:$jetbrains_annotations_version"
     api project(':api')
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
-    implementation "org.osgi:org.osgi.service.log:$osgi_log_version"
-    implementation "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
-    implementation "org.osgi:osgi.promise:$osgi_version"
     implementation "org.slf4j:slf4j-api:$slf4j_version"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
@@ -48,6 +46,9 @@ dependencies {
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
+    integrationTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
+    integrationTestRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
 }
 
 //compile 'org.apache.felix:org.apache.felix.main:5.4.0',
