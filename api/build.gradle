@@ -5,13 +5,15 @@ plugins {
 }
 
 configurations {
-    [ compileClasspath, testCompileClasspath ].forEach {
-        it.exclude module: 'kotlin-stdlib-jdk8'
+    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+        }
     }
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    api "org.jetbrains:annotations:$jetbrains_annotations_version"
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
 }

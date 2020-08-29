@@ -17,20 +17,20 @@ sourceSets {
 }
 
 configurations {
-    testCompileOnly.extendsFrom compileOnly
     integrationTestApi.extendsFrom testApi
-    integrationTestCompileOnly.extendsFrom testCompileOnly
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 
-    [ compileClasspath, testCompileClasspath, integrationTestCompileClasspath ].forEach {
-        it.exclude module: 'kotlin-stdlib-jdk8'
+    [ runtimeClasspath, testRuntimeClasspath, integrationTestRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+        }
     }
 }
 
 dependencies {
-    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    api "org.jetbrains:annotations:$jetbrains_annotations_version"
     api project(':api')
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
@@ -76,12 +76,12 @@ def resolve = tasks.register('resolve', Resolve) {
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
-    mustRunAfter resolve
+    dependsOn resolve
     bundles sourceSets.integrationTest.runtimeClasspath
     bndrun = 'test.bndrun'
 }
 
-def check = tasks.named('check') {
+tasks.named('check') {
     dependsOn resolve, testOSGi
 }
 
