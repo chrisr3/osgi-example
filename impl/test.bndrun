@@ -10,7 +10,7 @@
 
 -runrequires: \
     bnd.identity;id='${project.archivesBaseName}-tests',\
-    bnd.identity;id='${project.archivesBaseName}',\
+    bnd.identity;id='com.example.osgi.impl',\
     bnd.identity;id='junit-jupiter-engine',\
     bnd.identity;id='junit-platform-launcher'
 
@@ -22,8 +22,8 @@
 # The version ranges will change as the versions of
 # the artifacts and/or their dependencies change.
 -runbundles: \
-	api;version='[1.0.0,1.0.1)',\
-	impl;version='[1.0.0,1.0.1)',\
+	com.example.osgi.api;version='[1.0.0,1.0.1)',\
+	com.example.osgi.impl;version='[1.0.0,1.0.1)',\
 	impl-tests;version='[1.0.0,1.0.1)',\
 	junit-jupiter-api;version='[5.6.2,5.6.3)',\
 	junit-jupiter-engine;version='[5.6.2,5.6.3)',\

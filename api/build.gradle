@@ -17,3 +17,10 @@ configurations {
 dependencies {
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
 }
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes('Bundle-Name': 'OSGi Example Api')
+        attributes('Bundle-SymbolicName': 'com.example.osgi.api')
+    }
+}

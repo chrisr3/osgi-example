@@ -57,6 +57,12 @@ dependencies {
 //        'org.apache.felix:org.apache.felix.dependencymanager:4.2.0'
 //
 
+tasks.named('jar', Jar) {
+    manifest {
+        attributes('Bundle-Name': 'OSGi Example Impl')
+        attributes('Bundle-SymbolicName': 'com.example.osgi.impl')
+    }
+}
 
 def testingBundle = tasks.register('testingBundle', Bundle) {
     archiveClassifier = 'tests'
