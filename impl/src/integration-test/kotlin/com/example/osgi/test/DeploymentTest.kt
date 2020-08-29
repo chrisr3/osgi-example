@@ -4,20 +4,17 @@ import com.example.osgi.api.Greetings
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
 import org.junit.jupiter.api.Test
-import org.osgi.framework.FrameworkUtil
-import org.osgi.util.tracker.ServiceTracker
+import org.junit.jupiter.api.extension.ExtendWith
+import org.osgi.test.common.annotation.InjectService
+import org.osgi.test.junit5.service.ServiceExtension
 
+@ExtendWith(ServiceExtension::class)
 class DeploymentTest {
+
+    @InjectService(timeout = 1000) lateinit var greetings: Greetings
+
     @Test
     fun testGreet() {
         assertEquals("Hello Bob!", greetings.greet("Bob"))
-    }
-
-    private val greetings: Greetings get() {
-        val bundle = FrameworkUtil.getBundle(DeploymentTest::class.java) ?: fail("Bundle not found!")
-        return with(ServiceTracker<Greetings, Greetings>(bundle.bundleContext, Greetings::class.java, null)) {
-            open()
-            waitForService(1000) ?: fail("No Greetings")
-        }
     }
 }
