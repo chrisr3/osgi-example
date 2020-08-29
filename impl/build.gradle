@@ -39,6 +39,7 @@ dependencies {
     implementation "org.slf4j:slf4j-api:$slf4j_version"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testImplementation "org.osgi:org.osgi.test.junit5:0.9.0"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 
