@@ -24,6 +24,7 @@ configurations {
         cfg.resolutionStrategy {
             dependencySubstitution {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
             }
         }
     }
