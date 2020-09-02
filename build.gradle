@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id 'org.jetbrains.kotlin.jvm' apply false
     id 'base'
+    id 'idea'
 }
 
 subprojects {
@@ -42,3 +43,9 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
