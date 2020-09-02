@@ -38,6 +38,7 @@
 	bcprov;version='[1.66.0,1.66.1)',\
 	com.example.osgi.api;version='[1.0.0,1.0.1)',\
 	com.example.osgi.impl;version='[1.0.0,1.0.1)',\
+	com.example.osgi.logging;version='[1.0.0,1.0.1)',\
 	impl-tests;version='[1.0.0,1.0.1)',\
 	junit-jupiter-api;version='[5.6.2,5.6.3)',\
 	junit-jupiter-engine;version='[5.6.2,5.6.3)',\

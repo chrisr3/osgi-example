@@ -1,4 +1,4 @@
-package com.example.osgi.test
+package com.example.osgi.log
 
 import org.osgi.framework.Bundle
 import org.osgi.framework.ServiceReference

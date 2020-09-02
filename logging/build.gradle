@@ -1,0 +1,32 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Resolve
+
+plugins {
+    id 'biz.aQute.bnd.builder'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+configurations {
+    runtimeClasspath.resolutionStrategy {
+        dependencySubstitution {
+            substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+        }
+    }
+}
+
+dependencies {
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
+    compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
+    compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    implementation "org.slf4j:slf4j-api:$slf4j_version"
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes('Bundle-Name': 'OSGi Example SLF4J Logging Bridge')
+        attributes('Bundle-SymbolicName': 'com.example.osgi.logging')
+    }
+}

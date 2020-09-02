@@ -18,6 +18,7 @@ rootProject.name = 'OSGi example'
 
 include 'api'
 include 'impl'
+include 'logging'
 
 gradleEnterprise {
     buildScan {
