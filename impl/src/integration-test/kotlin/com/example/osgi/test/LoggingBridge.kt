@@ -21,9 +21,9 @@ import java.lang.reflect.Proxy
  * A crude implementation of OSGi's [LoggerFactory] and [LogService]
  * components that logs to the underlying SLF4J back-end.
  */
-@Component(immediate = true)
+@Component(immediate = true, service = [ LoggerFactory::class ])
 @Suppress("unused")
-class LoggingBridge : LoggerFactory, LogService {
+class LoggingBridge : LogService {
     override fun getLogger(name: String): Logger {
         return LoggerAdapter(org.slf4j.LoggerFactory.getLogger(name))
     }
