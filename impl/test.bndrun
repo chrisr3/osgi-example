@@ -20,13 +20,12 @@
     bnd.identity;id='com.example.osgi.impl',\
     bnd.identity;id='junit-jupiter-engine',\
     bnd.identity;id='junit-platform-launcher',\
-    bnd.identity;id='org.apache.felix.configadmin',\
-    bnd.identity;id='org.apache.felix.logback',\
-    bnd.identity;id='org.apache.felix.log',\
+    bnd.identity;id='slf4j.simple',\
     bnd.identity;id='bcprov'
 
-#    bnd.identity;id='org.slf4j.osgi-over-slf4j',\
-#    bnd.identity;id='slf4j.simple',\
+#    bnd.identity;id='org.apache.felix.configadmin',\
+#    bnd.identity;id='org.apache.felix.logback',\
+#    bnd.identity;id='org.apache.felix.log',\
 
 # This will help us keep -runbundles sorted
 -runstartlevel: \
@@ -37,8 +36,6 @@
 # the artifacts and/or their dependencies change.
 -runbundles: \
 	bcprov;version='[1.66.0,1.66.1)',\
-	ch.qos.logback.classic;version='[1.2.3,1.2.4)',\
-	ch.qos.logback.core;version='[1.2.3,1.2.4)',\
 	com.example.osgi.api;version='[1.0.0,1.0.1)',\
 	com.example.osgi.impl;version='[1.0.0,1.0.1)',\
 	impl-tests;version='[1.0.0,1.0.1)',\
@@ -47,13 +44,13 @@
 	junit-platform-commons;version='[1.6.2,1.6.3)',\
 	junit-platform-engine;version='[1.6.2,1.6.3)',\
 	junit-platform-launcher;version='[1.6.2,1.6.3)',\
-	org.apache.felix.configadmin;version='[1.9.18,1.9.19)',\
-	org.apache.felix.log;version='[1.2.2,1.2.3)',\
-	org.apache.felix.logback;version='[1.0.2,1.0.3)',\
 	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
 	org.jetbrains.kotlin.osgi-bundle;version='[1.4.0,1.4.1)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
+	org.osgi.service.log;version='[1.4.0,1.4.1)',\
 	org.osgi.test.common;version='[0.9.0,0.9.1)',\
 	org.osgi.test.junit5;version='[0.9.0,0.9.1)',\
+	org.osgi.util.pushstream;version='[1.0.1,1.0.2)',\
 	osgi.promise;version='[7.0.0,7.0.1)',\
-	slf4j.api;version='[1.7.30,1.7.31)'
+	slf4j.api;version='[1.7.30,1.7.31)',\
+	slf4j.simple;version='[1.7.30,1.7.31)'
