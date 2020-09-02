@@ -1,4 +1,4 @@
-package com.example.osgi.provider
+package com.example.osgi.test
 
 import org.osgi.framework.Bundle
 import org.osgi.framework.ServiceReference
