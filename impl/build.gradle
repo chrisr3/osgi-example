@@ -46,22 +46,23 @@ dependencies {
     implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"
     implementation "org.slf4j:slf4j-api:$slf4j_version"
 
-    testImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:$log4j_version"
 
+    integrationTestImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
     integrationTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
     integrationTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
-    integrationTestRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
+    integrationTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
+    integrationTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
 
     // Basic SLF4J back-end
     integrationTestRuntimeOnly project(':logging')
     integrationTestRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
-    integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
+    integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
 }
 
 tasks.named('jar', Jar) {

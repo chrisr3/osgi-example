@@ -32,10 +32,9 @@ dependencies {
     testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     testRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
-    testRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
 
     // OSGi Logging Service, implemented by Felix and consumed by Logback.
-    testRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
+    testRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.configadmin:$felix_configadmin_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.logback:$felix_logback_version"
