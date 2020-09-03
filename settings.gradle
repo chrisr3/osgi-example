@@ -18,6 +18,7 @@ rootProject.name = 'OSGi example'
 
 include 'api'
 include 'impl'
+include 'logback'
 include 'logging'
 
 gradleEnterprise {

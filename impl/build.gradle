@@ -20,6 +20,7 @@ sourceSets {
 }
 
 configurations {
+    testArtifacts
     testCompileOnly.extendsFrom compileOnly
     integrationTestApi.extendsFrom testApi
     integrationTestCompileOnly.extendsFrom testCompileOnly
@@ -56,13 +57,6 @@ dependencies {
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     integrationTestRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
-
-    // OSGi Logging Service, implemented by Felix and consumed by Logback.
-//    integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
-//    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.configadmin:$felix_configadmin_version"
-//    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
-//    integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.logback:$felix_logback_version"
-//    integrationTestRuntimeOnly "ch.qos.logback:logback-classic:$logback_version"
 
     // Basic SLF4J back-end
     integrationTestRuntimeOnly project(':logging')
@@ -106,4 +100,5 @@ tasks.named('check') {
 
 artifacts {
     archives testingBundle.flatMap { it.archiveFile }
+    testArtifacts testingBundle.flatMap { it.archiveFile }
 }

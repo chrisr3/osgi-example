@@ -1,0 +1,62 @@
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
+plugins {
+    id 'biz.aQute.bnd.builder'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+configurations {
+    testCompileOnly.extendsFrom compileOnly
+
+    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':api')
+    implementation project(':impl')
+
+    testImplementation project(path: ':impl', configuration: 'testArtifacts')
+    testImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    testRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    testRuntimeOnly "org.osgi:osgi.promise:$osgi_version"
+
+    // OSGi Logging Service, implemented by Felix and consumed by Logback.
+    testRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_pushstream_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.configadmin:$felix_configadmin_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.logback:$felix_logback_version"
+    testRuntimeOnly "ch.qos.logback:logback-classic:$logback_version"
+}
+
+tasks.named('jar', Jar) {
+    enabled = false
+}
+
+def resolve = tasks.register('resolve', Resolve) {
+    bundles sourceSets.test.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+def testOSGi = tasks.register('testOSGi', TestOSGi) {
+    dependsOn resolve
+    bundles sourceSets.test.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+tasks.named('check') {
+    dependsOn resolve, testOSGi
+}
