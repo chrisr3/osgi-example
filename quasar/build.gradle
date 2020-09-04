@@ -1,0 +1,112 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
+plugins {
+    id 'net.corda.plugins.quasar-utils'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'biz.aQute.bnd.builder'
+    id 'java-library'
+}
+
+quasar {
+    excludePackages.addAll(
+        "aQute.**",
+        "org.junit.**"
+    )
+}
+
+repositories {
+    maven {
+        url 'https://software.r3.com/artifactory/corda-dependencies-dev'
+    }
+}
+
+sourceSets {
+    osgiTest {
+        kotlin {
+            srcDirs = [ 'src/osgi-test/kotlin' ]
+        }
+        resources {
+            srcDirs = [ 'src/osgi-test/resources' ]
+        }
+    }
+}
+
+configurations {
+    osgiTestApi.extendsFrom api
+    osgiTestCompileOnly.extendsFrom compileOnly
+    osgiTestImplementation.extendsFrom implementation
+
+    [ runtimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+            cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+}
+
+dependencies {
+    api project(':api')
+
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
+    compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
+    compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+
+    osgiTestImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
+    osgiTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    osgiTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+    osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+    osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    osgiTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    osgiTestRuntimeOnly "org.osgi:org.osgi.service.cm:$osgi_cm_version"
+    osgiTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
+    osgiTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
+
+    // Basic SLF4J back-end
+    osgiTestRuntimeOnly project(':logging')
+    osgiTestRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
+    osgiTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
+}
+
+tasks.named('jar', Jar) {
+    manifest {
+        attributes('Bundle-Name': 'OSGi Example Worker')
+        attributes('Bundle-SymbolicName': 'com.example.osgi.work')
+    }
+}
+
+def testingBundle = tasks.register('testingBundle', Bundle) {
+    archiveClassifier = 'tests'
+    from sourceSets.osgiTest.output
+    sourceSet = sourceSets.osgiTest
+
+    manifest {
+        // Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
+        attributes('Bundle-SymbolicName': '\${task.archiveBaseName}-\${task.archiveClassifier}')
+        attributes('Test-Cases': '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}')
+    }
+}
+
+def resolve = tasks.register('resolve', Resolve) {
+    bundles sourceSets.osgiTest.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+def testOSGi = tasks.register('testOSGi', TestOSGi) {
+    dependsOn resolve
+    bundles sourceSets.osgiTest.runtimeClasspath
+    bndrun = 'test.bndrun'
+}
+
+tasks.named('check') {
+    dependsOn resolve, testOSGi
+}
+
+artifacts {
+    archives testingBundle.flatMap { it.archiveFile }
+}
