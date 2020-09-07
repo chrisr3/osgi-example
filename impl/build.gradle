@@ -85,13 +85,13 @@ def testingBundle = tasks.register('testingBundle', Bundle) {
 }
 
 def resolve = tasks.register('resolve', Resolve) {
-    bundles sourceSets.integrationTest.runtimeClasspath
+    bundles = sourceSets.integrationTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
-    bundles sourceSets.integrationTest.runtimeClasspath
+    bundles = sourceSets.integrationTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
 }
 

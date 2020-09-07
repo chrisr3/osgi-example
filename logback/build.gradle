@@ -46,13 +46,13 @@ tasks.named('jar', Jar) {
 }
 
 def resolve = tasks.register('resolve', Resolve) {
-    bundles sourceSets.test.runtimeClasspath
+    bundles = sourceSets.test.runtimeClasspath
     bndrun = 'test.bndrun'
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
-    bundles sourceSets.test.runtimeClasspath
+    bundles = sourceSets.test.runtimeClasspath
     bndrun = 'test.bndrun'
 }
 

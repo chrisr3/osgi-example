@@ -37,11 +37,15 @@ configurations {
     osgiTestApi.extendsFrom api
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
+    osgiTestRuntimeOnly.extendsFrom cordaRuntime
 
     [ runtimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {
             dependencySubstitution {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk7') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib-common') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
                 substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
             }
             cacheChangingModulesFor 0, 'seconds'
@@ -93,13 +97,13 @@ def testingBundle = tasks.register('testingBundle', Bundle) {
 }
 
 def resolve = tasks.register('resolve', Resolve) {
-    bundles sourceSets.osgiTest.runtimeClasspath
+    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
-    bundles sourceSets.osgiTest.runtimeClasspath
+    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
 }
 
