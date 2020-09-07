@@ -5,6 +5,7 @@
 -runee: JavaSE-1.8
 -runvm: "-javaagent:${project.configurations.quasar.singleFile}${project.quasar.options}",\
         -Dco.paralleluniverse.fibers.verifyInstrumentation
+-runsystempackages: sun.misc
 -runfw: org.apache.felix.framework
 -resolve.effective: active
 -runproperties: \
