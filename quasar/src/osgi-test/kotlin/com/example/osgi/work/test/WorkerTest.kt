@@ -10,7 +10,7 @@ import org.osgi.test.junit5.service.ServiceExtension
 @ExtendWith(ServiceExtension::class)
 class WorkerTest {
 
-    @InjectService(timeout = 1000)
+    @InjectService(timeout = 1000, filter = "(component.name=greetings)")
     lateinit var greetings: Greetings
 
     @Test

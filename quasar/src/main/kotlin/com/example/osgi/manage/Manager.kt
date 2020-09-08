@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.DefaultFiberScheduler
 import co.paralleluniverse.fibers.Fiber
 import co.paralleluniverse.fibers.SuspendExecution
 import co.paralleluniverse.strands.SuspendableCallable
+import com.example.osgi.api.Freezer
 import com.example.osgi.api.Greetings
 import org.osgi.service.component.annotations.Activate
 import org.osgi.service.component.annotations.Component
@@ -19,12 +20,20 @@ class Manager @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger,
 
+    @Reference(target = "(component.name=greetings)")
+    private val greetings: Greetings,
+
     @Reference
-    private val greeting: Greetings
+    private val freezer: Freezer
 ) {
     @Activate
-    fun doStandUp() {
+    fun run() {
         val workers = listOf("Tom", "Dick", "Harry", "Barbara", "Jerry", "Margot", "Basil", "Sybil")
+        doRollCall(workers)
+        freezer.freeze(workers)
+    }
+
+    private fun doRollCall(workers: List<String>) {
         val partners = workers.toRandomPartners()
         val results = LinkedBlockingQueue<Fiber<in String>>()
         val fibers = mutableMapOf<String, Fiber<String>>()
@@ -34,7 +43,7 @@ class Manager @Activate constructor(
                 val worker = Fiber.currentFiber()
                 val partner = fibers[partners[idx]]
 
-                val message = greeting.greet(worker.name)
+                val message = greetings.greet(worker.name)
 
                 logger.info("{} hands over to {}...", worker.name, partner?.name)
                 Fiber.parkAndUnpark(partner)

@@ -17,8 +17,12 @@ quasar {
 }
 
 repositories {
+    mavenCentral()
     maven {
         url 'https://software.r3.com/artifactory/corda-dependencies-dev'
+    }
+    maven {
+        url 'https://software.r3.com/artifactory/corda-dependencies'
     }
 }
 
@@ -39,7 +43,7 @@ configurations {
     osgiTestImplementation.extendsFrom implementation
     osgiTestRuntimeOnly.extendsFrom cordaRuntime
 
-    [ runtimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
+    [ runtimeClasspath, testRuntimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {
             dependencySubstitution {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
@@ -55,18 +59,23 @@ configurations {
 
 dependencies {
     api project(':api')
+    api "org.osgi:org.osgi.service.log:$osgi_log_version"
+    implementation "com.esotericsoftware:kryo:4.0.2"
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
-    compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+
+    testImplementation project(':logging')
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+    testRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
 
     osgiTestImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
     osgiTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
     osgiTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.service.cm:$osgi_cm_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"

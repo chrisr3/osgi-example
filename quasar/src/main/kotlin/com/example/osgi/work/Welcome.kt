@@ -9,14 +9,14 @@ import org.osgi.service.log.Logger
 import org.osgi.service.log.LoggerFactory
 
 @Suppress("unused")
-@Component(name = "greetings")
-class Worker @Activate constructor(
+@Component(name = "welcome")
+class Welcome @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger
 ) : Greetings {
     @Suspendable
     override fun greet(name: String): String {
-        logger.info("Greeting for worker {}", name)
-        return "You are suspended, $name!"
+        logger.info("Thawed worker {}", name)
+        return "Welcome back, $name!"
     }
 }
