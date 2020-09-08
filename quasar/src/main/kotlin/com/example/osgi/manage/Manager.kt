@@ -1,3 +1,4 @@
+@file:JvmName("Toolkit")
 package com.example.osgi.manage
 
 import co.paralleluniverse.fibers.DefaultFiberScheduler
@@ -23,16 +24,27 @@ class Manager @Activate constructor(
 ) {
     @Activate
     fun doStandUp() {
-        val workers = listOf("Tom", "Dick", "Harry", "Barbara", "Jerry", "Margot", "Basil")
-
+        val workers = listOf("Tom", "Dick", "Harry", "Barbara", "Jerry", "Margot", "Basil", "Sybil")
+        val partners = workers.toRandomPartners()
         val results = LinkedBlockingQueue<Fiber<in String>>()
-        val fibers = workers.map { name ->
-            Fiber("greet-$name", DefaultFiberScheduler.getInstance(), SuspendableCallable @Throws(SuspendExecution::class, InterruptedException::class) {
-                val message = greeting.greet(name)
-                results.add(Fiber.currentFiber())
+        val fibers = mutableMapOf<String, Fiber<String>>()
+
+        fibers += workers.mapIndexed { idx, name ->
+            Fiber(name, DefaultFiberScheduler.getInstance(), SuspendableCallable @Throws(SuspendExecution::class, InterruptedException::class) {
+                val worker = Fiber.currentFiber()
+                val partner = fibers[partners[idx]]
+
+                val message = greeting.greet(worker.name)
+
+                logger.info("{} hands over to {}...", worker.name, partner?.name)
+                Fiber.parkAndUnpark(partner)
+                logger.info("... and {} carries on.", worker.name)
+
+                // Notify that this fiber is completing.
+                results.add(worker)
                 message
             })
-        }.associateByTo(LinkedHashMap(), Fiber<*>::getName)
+        }.associateBy(Fiber<String>::getName)
         fibers.values.forEach(Fiber<String>::start)
 
         while (fibers.isNotEmpty()) {
@@ -41,4 +53,16 @@ class Manager @Activate constructor(
             fibers.keys.remove(fiber.name)
         }
     }
+}
+
+private fun List<String>.toRandomPartners(): List<String> {
+    val result = ArrayList(shuffled())
+    for (i in 0..size - 2) {
+        val temp = result[i]
+        if (temp == this[i]) {
+            result[i] = result[i + 1]
+            result[i + 1] = temp
+        }
+    }
+    return result
 }
