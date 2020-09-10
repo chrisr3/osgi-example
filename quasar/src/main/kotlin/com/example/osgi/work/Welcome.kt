@@ -7,13 +7,14 @@ import org.osgi.service.component.annotations.Component
 import org.osgi.service.component.annotations.Reference
 import org.osgi.service.log.Logger
 import org.osgi.service.log.LoggerFactory
+import java.io.Serializable
 
 @Suppress("unused")
 @Component(name = "welcome")
 class Welcome @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger
-) : Greetings {
+) : Greetings, Serializable {
     @Suspendable
     override fun greet(name: String): String {
         logger.info("Thawed worker {}", name)

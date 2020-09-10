@@ -1,5 +1,6 @@
 package com.example.osgi.manage
 
+import co.paralleluniverse.fibers.CustomFiberWriter
 import co.paralleluniverse.fibers.DefaultFiberScheduler
 import co.paralleluniverse.fibers.Fiber
 import co.paralleluniverse.io.serialization.kryo.KryoSerializer
@@ -28,7 +29,7 @@ class FreezerImpl @Activate constructor(
 
         val fibers = workers.mapIndexed { idx, name ->
             logger.info("Freezing {}", name)
-            Fiber(name, DefaultFiberScheduler.getInstance(), Sleeper(welcome, checkpoints[idx]))
+            Fiber(name, DefaultFiberScheduler.getInstance(), Sleeper(welcome, checkpoints[idx], ::Pod))
         }.associateBy(Fiber<String>::getName)
         fibers.values.forEach(Fiber<String>::start)
 
@@ -54,5 +55,14 @@ class FreezerImpl @Activate constructor(
             val fiber: Fiber<String> = running.removeAt(0)
             logger.info("Year 3000 says: {}", fiber.get())
         }
+    }
+}
+
+private class Pod(private val checkpoint: CompletableFuture<ByteArray>) : CustomFiberWriter {
+    override fun write(fiber: Fiber<*>) {
+        val serializer = Fiber.getFiberSerializer().also { s ->
+            (s as KryoSerializer).kryo.classLoader = this::class.java.classLoader
+        }
+        checkpoint.complete(serializer.write(fiber))
     }
 }
