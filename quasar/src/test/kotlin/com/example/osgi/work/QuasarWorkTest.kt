@@ -16,10 +16,9 @@ class QuasarWorkTest {
     @Test
     fun testFibers() {
         val welcome = Welcome(loggerFor<Welcome>())
-        val freezer = FreezerImpl(loggerFor<FreezerImpl>(), welcome)
+        val freezer = FreezerImpl(loggerFactory, welcome)
         val worker = Worker(loggerFor<Worker>())
         val manager = Manager(loggerFor<Manager>(), worker, freezer)
         manager.run()
     }
 }
-

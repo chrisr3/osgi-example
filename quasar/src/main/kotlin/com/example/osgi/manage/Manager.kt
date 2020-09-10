@@ -15,7 +15,6 @@ import org.osgi.service.log.LoggerFactory
 import java.util.concurrent.LinkedBlockingQueue
 
 @Component(immediate = true)
-@Suppress("unused")
 class Manager @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger,

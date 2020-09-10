@@ -9,7 +9,6 @@ import org.osgi.service.log.Logger
 import org.osgi.service.log.LoggerFactory
 import java.io.Serializable
 
-@Suppress("unused")
 @Component(name = "greetings")
 class Worker @Activate constructor(
     @Reference(service = LoggerFactory::class)

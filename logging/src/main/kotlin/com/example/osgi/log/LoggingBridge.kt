@@ -12,7 +12,6 @@ import org.osgi.service.log.Logger
 import org.osgi.service.log.LoggerConsumer
 import org.osgi.service.log.LoggerFactory
 import org.slf4j.Logger.ROOT_LOGGER_NAME
-import java.io.Serializable
 import java.lang.Exception
 import java.lang.reflect.InvocationHandler
 import java.lang.reflect.Method
@@ -96,7 +95,7 @@ class LoggingBridge : LogService {
         }
     }
 
-    private class LoggerAdapter(private val logger: org.slf4j.Logger) : Logger, Serializable {
+    private class LoggerAdapter(private val logger: org.slf4j.Logger) : Logger {
         override fun getName(): String {
             return logger.name
         }
