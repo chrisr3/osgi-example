@@ -21,6 +21,7 @@ class FreezerImpl @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger,
 
+    // Identify which implementation we want here.
     @Reference(target = "(component.name=welcome)")
     private val welcome: Greetings
 ) : Freezer {

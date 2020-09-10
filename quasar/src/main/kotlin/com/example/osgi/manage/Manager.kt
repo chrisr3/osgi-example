@@ -20,6 +20,7 @@ class Manager @Activate constructor(
     @Reference(service = LoggerFactory::class)
     private val logger: Logger,
 
+    // Identify which implementation we want here.
     @Reference(target = "(component.name=greetings)")
     private val greetings: Greetings,
 
@@ -64,8 +65,12 @@ class Manager @Activate constructor(
     }
 }
 
+/**
+ * Shuffle this list such that every element
+ * is guaranteed to change position.
+ */
 private fun List<String>.toRandomPartners(): List<String> {
-    val result = ArrayList(shuffled())
+    val result = shuffled().toMutableList()
     for (i in 0..size - 2) {
         val temp = result[i]
         if (temp == this[i]) {
