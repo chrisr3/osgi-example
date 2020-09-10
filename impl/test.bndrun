@@ -18,8 +18,7 @@
     bnd.identity;id='com.example.osgi.impl',\
     bnd.identity;id='junit-jupiter-engine',\
     bnd.identity;id='junit-platform-launcher',\
-    bnd.identity;id='slf4j.simple',\
-    bnd.identity;id='bcprov'
+    bnd.identity;id='slf4j.simple'
 
 # This will help us keep -runbundles sorted
 -runstartlevel: \

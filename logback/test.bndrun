@@ -17,8 +17,7 @@
     bnd.identity;id='junit-platform-launcher',\
     bnd.identity;id='org.apache.felix.configadmin',\
     bnd.identity;id='org.apache.felix.logback',\
-    bnd.identity;id='org.apache.felix.log',\
-    bnd.identity;id='bcprov'
+    bnd.identity;id='org.apache.felix.log'
 
 # This will help us keep -runbundles sorted
 -runstartlevel: \
