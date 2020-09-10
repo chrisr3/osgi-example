@@ -40,7 +40,7 @@
 	junit-platform-engine;version='[1.6.2,1.6.3)',\
 	junit-platform-launcher;version='[1.6.2,1.6.3)',\
 	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
-	org.jetbrains.kotlin.osgi-bundle;version='[1.4.0,1.4.1)',\
+	org.jetbrains.kotlin.osgi-bundle;version='[1.4.10,1.4.11)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.service.log;version='[1.4.0,1.4.1)',\
 	org.osgi.test.common;version='[0.9.0,0.9.1)',\

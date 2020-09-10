@@ -66,10 +66,10 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    manifest {
-        attributes('Bundle-Name': 'OSGi Example Impl')
-        attributes('Bundle-SymbolicName': 'com.example.osgi.impl')
-    }
+   bnd """
+Bundle-Name: OSGi Example Impl
+Bundle-SymbolicName: com.example.osgi.impl
+"""
 }
 
 def testingBundle = tasks.register('testingBundle', Bundle) {
@@ -77,11 +77,11 @@ def testingBundle = tasks.register('testingBundle', Bundle) {
     from sourceSets.integrationTest.output
     sourceSet = sourceSets.integrationTest
 
-    manifest {
-        // Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
-        attributes('Bundle-SymbolicName': '\${task.archiveBaseName}-\${task.archiveClassifier}')
-        attributes('Test-Cases': '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}')
-    }
+    bnd """
+# Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
+Bundle-SymbolicName: '\${task.archiveBaseName}-\${task.archiveClassifier}'
+Test-Cases: '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}'
+"""
 }
 
 def resolve = tasks.register('resolve', Resolve) {

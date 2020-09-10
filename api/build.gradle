@@ -19,8 +19,8 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    manifest {
-        attributes('Bundle-Name': 'OSGi Example Api')
-        attributes('Bundle-SymbolicName': 'com.example.osgi.api')
-    }
+    bnd """
+Bundle-Name: OSGi Example Api
+Bundle-SymbolicName: com.example.osgi.api
+"""
 }

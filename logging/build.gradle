@@ -25,8 +25,8 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    manifest {
-        attributes('Bundle-Name': 'OSGi Example SLF4J Logging Bridge')
-        attributes('Bundle-SymbolicName': 'com.example.osgi.logging')
-    }
+    bnd """
+Bundle-Name: OSGi Example SLF4J Logging Bridge
+Bundle-SymbolicName: com.example.osgi.logging
+"""
 }
