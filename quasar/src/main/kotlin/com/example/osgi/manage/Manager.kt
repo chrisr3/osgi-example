@@ -35,12 +35,13 @@ class Manager @Activate constructor(
 
     private fun doRollCall(workers: List<String>) {
         val partners = workers.toRandomPartners()
-        val results = LinkedBlockingQueue<Fiber<in String>>()
+        val results = LinkedBlockingQueue<Fiber<String>>()
         val fibers = mutableMapOf<String, Fiber<String>>()
 
         fibers += workers.mapIndexed { idx, name ->
             Fiber(name, DefaultFiberScheduler.getInstance(), SuspendableCallable @Throws(SuspendExecution::class, InterruptedException::class) {
-                val worker = Fiber.currentFiber()
+                @Suppress("unchecked_cast")
+                val worker = Fiber.currentFiber() as Fiber<String>
                 val partner = fibers[partners[idx]]
 
                 val message = greetings.greet(worker.name)
@@ -57,7 +58,7 @@ class Manager @Activate constructor(
         fibers.values.forEach(Fiber<String>::start)
 
         while (fibers.isNotEmpty()) {
-            val fiber: Fiber<in String> = results.take()
+            val fiber = results.take()
             logger.info("Role call: {}", fiber.get())
             fibers.keys.remove(fiber.name)
         }

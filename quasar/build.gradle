@@ -9,6 +9,10 @@ plugins {
     id 'java-library'
 }
 
+ext {
+    quasarVersion = '0.7.14'
+}
+
 quasar {
     excludePackages.addAll(
         "aQute.**",
@@ -35,10 +39,12 @@ sourceSets {
 }
 
 configurations {
+    quasarAgent
+    quasarBundle
+
     osgiTestApi.extendsFrom api
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
-    osgiTestRuntimeOnly.extendsFrom cordaRuntime
 
     [ runtimeClasspath, testRuntimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {
@@ -55,9 +61,15 @@ configurations {
 }
 
 dependencies {
+    quasarAgent("co.paralleluniverse:quasar-core-osgi:$quasar_version:agent") {
+        transitive = false
+    }
+    quasarBundle "co.paralleluniverse:quasar-core-osgi:$quasar_version"
+
     api project(':api')
     api "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
+    osgiTestRuntimeOnly configurations.quasarBundle
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
