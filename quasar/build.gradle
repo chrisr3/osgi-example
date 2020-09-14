@@ -23,7 +23,7 @@ quasar {
 repositories {
     mavenCentral()
     maven {
-        url 'https://software.r3.com/artifactory/corda-dependencies-dev'
+        url 'https://software.r3.com/artifactory/corda-dependencies'
     }
 }
 
@@ -39,9 +39,6 @@ sourceSets {
 }
 
 configurations {
-    quasarAgent
-    quasarBundle
-
     osgiTestApi.extendsFrom api
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
@@ -61,15 +58,11 @@ configurations {
 }
 
 dependencies {
-    quasarAgent("co.paralleluniverse:quasar-core-osgi:$quasar_version:agent") {
-        transitive = false
-    }
-    quasarBundle "co.paralleluniverse:quasar-core-osgi:$quasar_version"
-
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api project(':api')
     api "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
-    osgiTestRuntimeOnly configurations.quasarBundle
+    osgiTestRuntimeOnly configurations.quasar
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
@@ -117,12 +110,14 @@ Test-Cases: '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.common
 def resolve = tasks.register('resolve', Resolve) {
     bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
+    enabled = false
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
     bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
     bndrun = 'test.bndrun'
+    enabled = false
 }
 
 tasks.named('check') {

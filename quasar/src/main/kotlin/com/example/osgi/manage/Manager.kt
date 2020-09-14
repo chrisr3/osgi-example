@@ -55,7 +55,9 @@ class Manager @Activate constructor(
                 message
             })
         }.associateBy(Fiber<String>::getName)
-        fibers.values.forEach(Fiber<String>::start)
+        fibers.values.forEach {
+            it.start()
+        }
 
         while (fibers.isNotEmpty()) {
             val fiber = results.take()
