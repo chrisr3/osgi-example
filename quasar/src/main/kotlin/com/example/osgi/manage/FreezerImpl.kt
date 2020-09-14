@@ -16,6 +16,7 @@ import org.osgi.service.log.LoggerFactory
 import java.util.LinkedList
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit.SECONDS
+import java.util.function.Function
 
 @Component
 class FreezerImpl @Activate constructor(
@@ -34,11 +35,13 @@ class FreezerImpl @Activate constructor(
 
         val fibers = workers.mapIndexed { idx, name ->
             logger.info("Freezing {}", name)
-            Fiber(name, DefaultFiberScheduler.getInstance(), Sleeper(welcome, checkpoints[idx]) { checkpoint ->
+            Fiber(name, DefaultFiberScheduler.getInstance(), Sleeper(welcome, checkpoints[idx], Function { checkpoint ->
                 Pod(getSerializer(), checkpoint)
-            })
+            }))
         }.associateBy(Fiber<String>::getName)
-        fibers.values.forEach(Fiber<String>::start)
+        fibers.values.forEach {
+            it.start()
+        }
 
         // Wait for everyone to finish checkpointing.
         CompletableFuture.allOf(*checkpoints).join()
@@ -55,12 +58,12 @@ class FreezerImpl @Activate constructor(
         }
 
         while (running.isNotEmpty()) {
-            val fiber: Fiber<String> = running.pop()
+            val fiber = running.pop()
             logger.info("Year 3000 says: {}", fiber.get(30, SECONDS))
         }
     }
 
-    private fun getSerializer(): ByteArraySerializer {
+    fun getSerializer(): ByteArraySerializer {
         val serializer = Fiber.getFiberSerializer() as KryoSerializer
         val kryo = serializer.kryo
         kryo.classLoader = this::class.java.classLoader

@@ -39,7 +39,7 @@ class Manager @Activate constructor(
         val fibers = mutableMapOf<String, Fiber<String>>()
 
         fibers += workers.mapIndexed { idx, name ->
-            Fiber(name, DefaultFiberScheduler.getInstance(), SuspendableCallable @Throws(SuspendExecution::class, InterruptedException::class) {
+            Fiber(name, DefaultFiberScheduler.getInstance(), SuspendableCallable @Throws(SuspendExecution::class) {
                 @Suppress("unchecked_cast")
                 val worker = Fiber.currentFiber() as Fiber<String>
                 val partner = fibers[partners[idx]]
@@ -55,7 +55,9 @@ class Manager @Activate constructor(
                 message
             })
         }.associateBy(Fiber<String>::getName)
-        fibers.values.forEach(Fiber<String>::start)
+        fibers.values.forEach {
+            it.start()
+        }
 
         while (fibers.isNotEmpty()) {
             val fiber = results.take()

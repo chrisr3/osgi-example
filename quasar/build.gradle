@@ -10,7 +10,7 @@ plugins {
 }
 
 ext {
-    quasarVersion = '0.7.14'
+//    quasarVersion = '0.7.14'
 }
 
 quasar {
@@ -23,7 +23,7 @@ quasar {
 repositories {
     mavenCentral()
     maven {
-        url 'https://software.r3.com/artifactory/corda-dependencies-dev'
+        url 'https://software.r3.com/artifactory/corda-dependencies'
     }
 }
 
@@ -45,6 +45,7 @@ configurations {
     osgiTestApi.extendsFrom api
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
+    testCompileOnly.extendsFrom compileOnly
 
     [ runtimeClasspath, testRuntimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {

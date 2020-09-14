@@ -17,6 +17,7 @@ configurations {
 }
 
 dependencies {
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
