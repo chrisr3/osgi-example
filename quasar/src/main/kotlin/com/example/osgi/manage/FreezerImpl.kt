@@ -54,9 +54,19 @@ class FreezerImpl @Activate constructor(
             Fiber.unparkDeserialized(fiber, DefaultFiberScheduler.getInstance())
         }
 
+        val missing = mutableListOf<String>()
         while (running.isNotEmpty()) {
             val fiber = running.pop()
-            logger.info("Year 3000 says: {}", fiber.get(30, SECONDS))
+            try {
+                logger.info("Year 3000 says: {}", fiber.get(30, SECONDS))
+            } catch (e: Exception) {
+                logger.warn("{} was lost...", fiber.name)
+                missing += fiber.name
+            }
+        }
+
+        if (missing.isNotEmpty()) {
+            throw IllegalStateException("Sleepers lost: $missing")
         }
     }
 
