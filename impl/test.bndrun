@@ -2,7 +2,7 @@
 
 -tester: biz.aQute.tester.junit-platform
 
--runee: JavaSE-1.8
+-runee: JavaSE-11
 -runfw: org.apache.felix.framework
 -resolve.effective: active
 -runproperties: \
