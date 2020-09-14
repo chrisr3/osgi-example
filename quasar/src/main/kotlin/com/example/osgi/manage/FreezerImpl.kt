@@ -55,7 +55,7 @@ class FreezerImpl @Activate constructor(
         }
 
         while (running.isNotEmpty()) {
-            val fiber: Fiber<String> = running.pop()
+            val fiber = running.pop()
             logger.info("Year 3000 says: {}", fiber.get(30, SECONDS))
         }
     }
