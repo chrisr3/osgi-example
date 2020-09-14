@@ -1,6 +1,6 @@
 package com.example.osgi.work
 
-import co.paralleluniverse.fibers.CustomFiberWriter
+import co.paralleluniverse.fibers.FiberWriter
 import co.paralleluniverse.fibers.Fiber
 import co.paralleluniverse.fibers.Suspendable
 import co.paralleluniverse.strands.SuspendableCallable
@@ -15,11 +15,11 @@ class Sleeper(
     private val checkpoint: CompletableFuture<ByteArray>,
 
     @Transient
-    private val factory: Function<CompletableFuture<ByteArray>, CustomFiberWriter>
+    private val factory: Function<CompletableFuture<ByteArray>, FiberWriter>
 ) : SuspendableCallable<String> {
     @Suspendable
     override fun run(): String {
-        Fiber.parkAndCustomSerialize(factory.apply(checkpoint))
+        Fiber.parkAndSerialize(factory.apply(checkpoint))
 
         val worker = Fiber.currentFiber()
         return greetings.greet(worker.name)

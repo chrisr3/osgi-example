@@ -1,6 +1,6 @@
 package com.example.osgi.manage
 
-import co.paralleluniverse.fibers.CustomFiberWriter
+import co.paralleluniverse.fibers.FiberWriter
 import co.paralleluniverse.fibers.DefaultFiberScheduler
 import co.paralleluniverse.fibers.Fiber
 import co.paralleluniverse.io.serialization.ByteArraySerializer
@@ -88,8 +88,8 @@ class FreezerImpl @Activate constructor(
 private class Pod(
     private val serializer: ByteArraySerializer,
     private val checkpoint: CompletableFuture<ByteArray>
-) : CustomFiberWriter {
-    override fun write(fiber: Fiber<*>) {
+) : FiberWriter {
+    override fun write(fiber: Fiber<*>, unused: ByteArraySerializer?) {
         checkpoint.complete(serializer.write(fiber))
     }
 }
