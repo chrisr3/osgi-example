@@ -1,22 +1,16 @@
-import aQute.bnd.gradle.Bundle
-import aQute.bnd.gradle.Resolve
-import aQute.bnd.gradle.TestOSGi
-
 plugins {
     id 'net.corda.plugins.quasar-utils'
     id 'org.jetbrains.kotlin.jvm'
-    id 'biz.aQute.bnd.builder'
     id 'java-library'
-}
-
-ext {
-    quasarVersion = '0.7.14'
 }
 
 quasar {
     excludePackages.addAll(
         "aQute.**",
-        "org.junit.**"
+        "com.codahale**",
+        "org.junit**",
+        "org.gradle**",
+        "org.objenesis**"
     )
 }
 
@@ -27,42 +21,11 @@ repositories {
     }
 }
 
-sourceSets {
-    osgiTest {
-        kotlin {
-            srcDirs = [ 'src/osgi-test/kotlin' ]
-        }
-        resources {
-            srcDirs = [ 'src/osgi-test/resources' ]
-        }
-    }
-}
-
-configurations {
-    osgiTestApi.extendsFrom api
-    osgiTestCompileOnly.extendsFrom compileOnly
-    osgiTestImplementation.extendsFrom implementation
-
-    [ runtimeClasspath, testRuntimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
-        cfg.resolutionStrategy {
-            dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk7') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-common') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-            }
-            cacheChangingModulesFor 0, 'seconds'
-        }
-    }
-}
-
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     api project(':api')
     api "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
-    osgiTestRuntimeOnly configurations.quasar
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
@@ -72,58 +35,4 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
-
-    osgiTestImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
-    osgiTestRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
-    osgiTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
-    osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
-    osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.service.cm:$osgi_cm_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
-
-    // Basic SLF4J back-end
-    osgiTestRuntimeOnly project(':logging')
-    osgiTestRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
-}
-
-tasks.named('jar', Jar) {
-    bnd """
-Bundle-Name: OSGi Example Worker
-Bundle-SymbolicName: com.example.osgi.work
-"""
-}
-
-def testingBundle = tasks.register('testingBundle', Bundle) {
-    archiveClassifier = 'tests'
-    from sourceSets.osgiTest.output
-    sourceSet = sourceSets.osgiTest
-
-    bnd """
-# Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
-Bundle-SymbolicName: '\${task.archiveBaseName}-\${task.archiveClassifier}'
-Test-Cases: '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}'
-"""
-}
-
-def resolve = tasks.register('resolve', Resolve) {
-    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
-    bndrun = 'test.bndrun'
-    enabled = false
-}
-
-def testOSGi = tasks.register('testOSGi', TestOSGi) {
-    dependsOn resolve
-    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
-    bndrun = 'test.bndrun'
-    enabled = false
-}
-
-tasks.named('check') {
-    dependsOn resolve, testOSGi
-}
-
-artifacts {
-    archives testingBundle.flatMap { it.archiveFile }
 }
