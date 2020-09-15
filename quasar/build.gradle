@@ -14,10 +14,19 @@ ext {
 }
 
 quasar {
-    excludePackages.addAll(
-        "aQute.**",
-        "org.junit.**"
-    )
+    excludePackages = [
+        'aQute.**',
+        'co.paralleluniverse**',
+        'com.codahale**',
+        'com.esotericsoftware.**',
+        'groovy**',
+        'jdk**',
+        'kotlin**',
+        'org.gradle**',
+        'org.junit**',
+        'org.objenesis*',
+        'org.slf4j**'
+    ]
 }
 
 repositories {
