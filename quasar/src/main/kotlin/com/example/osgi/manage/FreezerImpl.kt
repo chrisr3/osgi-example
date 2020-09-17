@@ -71,7 +71,7 @@ class FreezerImpl @Activate constructor(
     }
 
     private fun getSerializer(): ByteArraySerializer {
-        val serializer = Fiber.getFiberSerializer() as KryoSerializer
+        val serializer = Fiber.getFiberSerializer(false) as KryoSerializer
         val kryo = serializer.kryo
         kryo.classLoader = this::class.java.classLoader
 
