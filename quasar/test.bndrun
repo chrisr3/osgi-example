@@ -6,7 +6,7 @@
 -runvm: "-javaagent:${project.configurations.quasarAgent.singleFile}${project.quasar.options}",\
         -Dco.paralleluniverse.fibers.verifyInstrumentation
 -runpath: \
-	co.paralleluniverse.quasar-core;version='[0.7.14,0.7.15)',\
+	co.paralleluniverse.quasar-core;version='${project.quasarVersion}',\
 	com.esotericsoftware.kryo;version='[4.0.2,4.0.3)',\
 	com.esotericsoftware.minlog;version='[1.3.0,1.3.1)',\
 	com.esotericsoftware.reflectasm;version='[1.11.3,1.11.4)',\
@@ -19,6 +19,7 @@
 	slf4j.simple;version='[1.7.30,1.7.31)'
 -runsystempackages: \
     co.paralleluniverse.fibers.instrument;version='${project.quasarVersion}',\
+    co.paralleluniverse.common.resource;version='${project.quasarVersion}',\
     co.paralleluniverse.common.asm;version='${project.quasarVersion}',\
     sun.misc
 -runfw: org.apache.felix.framework
