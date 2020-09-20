@@ -1,0 +1,82 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
+plugins {
+    id 'biz.aQute.bnd.builder'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+configurations {
+    kotlinJar {
+        transitive = false
+    }
+    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+        }
+    }
+}
+
+ext {
+    kotlinJars = provider {
+        configurations.kotlinJar.collect { file -> "$file;version=file" }.join(',')
+    }
+}
+
+dependencies {
+    api "org.osgi:osgi.annotation:$osgi_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+}
+
+tasks.named('jar', Jar) {
+    bnd """
+Bundle-SymbolicName: com.example.osgi.kotlin
+Bundle-Name: OSGi Example with Kotlin
+"""
+}
+
+def testBundle = tasks.register('testBundle', Bundle) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+    sourceSet = sourceSets.test
+
+    bnd """
+Bundle-SymbolicName: com.example.osgi.kotlin.test
+Test-Cases: '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}'
+"""
+}
+
+def resolve = tasks.register('resolve', Resolve) {
+    bundles = sourceSets.test.runtimeClasspath + configurations.archives.artifacts.files
+    bndrun = 'test.bndrun'
+}
+
+def testOSGi = tasks.register('testOSGi', TestOSGi) {
+    dependsOn resolve
+    bundles = sourceSets.test.runtimeClasspath + configurations.archives.artifacts.files
+    bndrun = 'test.bndrun'
+}
+
+tasks.named('test', Test) {
+    enabled = false
+}
+
+tasks.named('check') {
+    dependsOn resolve, testOSGi
+}
+
+artifacts {
+    archives testBundle.flatMap { it.archiveFile }
+}
