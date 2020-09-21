@@ -3,6 +3,7 @@ package com.example.osgi.manage
 import co.paralleluniverse.fibers.CustomFiberWriter
 import co.paralleluniverse.fibers.DefaultFiberScheduler
 import co.paralleluniverse.fibers.Fiber
+import co.paralleluniverse.fibers.FiberExecutorScheduler
 import co.paralleluniverse.io.serialization.ByteArraySerializer
 import co.paralleluniverse.io.serialization.kryo.KryoSerializer
 import com.example.osgi.api.Freezer
@@ -10,11 +11,13 @@ import com.example.osgi.api.Greetings
 import com.example.osgi.work.Sleeper
 import org.osgi.service.component.annotations.Activate
 import org.osgi.service.component.annotations.Component
+import org.osgi.service.component.annotations.Deactivate
 import org.osgi.service.component.annotations.Reference
 import org.osgi.service.log.Logger
 import org.osgi.service.log.LoggerFactory
 import java.util.LinkedList
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit.SECONDS
 
 @Component
@@ -28,13 +31,22 @@ class FreezerImpl @Activate constructor(
 ) : Freezer {
     private val logger: Logger = loggerFactory.getLogger(this::class.java)
     private val loggerSerializer = LoggerSerializer(loggerFactory)
+    private val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
+    private val scheduler = FiberExecutorScheduler("freezer", executor)
+
+    @Deactivate
+    private fun shutdown() {
+        logger.info("Shutting down")
+        scheduler.shutdown()
+        executor.shutdownNow()
+    }
 
     override fun freeze(workers: List<String>) {
         val checkpoints = Array<CompletableFuture<ByteArray>>(workers.size) { CompletableFuture() }
 
         val fibers = workers.mapIndexed { idx, name ->
             logger.info("Freezing {}", name)
-            Fiber(name, DefaultFiberScheduler.getInstance(), Sleeper(welcome, checkpoints[idx]) { checkpoint ->
+            Fiber(name, scheduler, Sleeper(welcome, checkpoints[idx]) { checkpoint ->
                 Pod(getSerializer(), checkpoint)
             })
         }.associateBy(Fiber<String>::getName)
