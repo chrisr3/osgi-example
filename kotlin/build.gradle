@@ -54,7 +54,7 @@ def testBundle = tasks.register('testBundle', Bundle) {
 
     bnd """
 Bundle-SymbolicName: com.example.osgi.kotlin.test
-Test-Cases: '\${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}'
+Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 """
 }
 
