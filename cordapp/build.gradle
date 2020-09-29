@@ -1,0 +1,138 @@
+import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Resolve
+import aQute.bnd.gradle.TestOSGi
+
+buildscript {
+    configurations.classpath {
+        // Ensure we find the latest SNAPSHOTs of the plugins.
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}
+
+plugins {
+    id 'net.corda.plugins.cordapp-cpk'
+    id 'net.corda.plugins.quasar-utils'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'java-library'
+}
+
+cordapp {
+    targetPlatformVersion = 999
+    minimumPlatformVersion = 999
+
+    contract {
+        name = 'Example CorDapp'
+        versionId = 1
+        licence = 'Test-Licence'
+        vendor = 'R3'
+    }
+}
+
+quasar {
+    excludePackages = [
+        'aQute.**',
+        'co.paralleluniverse**',
+        'com.codahale**',
+        'com.esotericsoftware.**',
+        'groovy**',
+        'jdk**',
+        'kotlin**',
+        'org.gradle**',
+        'org.junit**',
+        'org.objenesis*',
+        'org.slf4j**'
+    ]
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        url "$artifactory_contextUrl/corda-dependencies-dev"
+    }
+}
+
+configurations {
+    kotlinJar {
+        transitive = false
+    }
+
+    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
+        cfg.resolutionStrategy {
+            dependencySubstitution {
+                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
+            }
+        }
+    }
+}
+
+ext {
+    quasarVersion = '0.7.14.r3-SNAPSHOT'
+
+    kotlinJars = provider {
+        configurations.kotlinJar.collect { file -> "$file;version=file" }.join(',')
+    }
+}
+
+dependencies {
+    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    cordaProvided "net.corda:corda-core:$corda_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+
+    testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    testRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    testRuntimeOnly "org.osgi:org.osgi.service.cm:$osgi_cm_version"
+    testRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
+    testRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
+
+    // OSGi Logging Service, implemented by Felix and consumed by Logback.
+    testRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.configadmin:$felix_configadmin_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.log:$felix_log_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.logback:$felix_logback_version"
+    testRuntimeOnly "ch.qos.logback:logback-classic:$logback_version"
+}
+
+tasks.named('test', Test) {
+    enabled = false
+}
+
+def testingBundle = tasks.register('testingBundle', Bundle) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+    sourceSet = sourceSets.test
+
+    bnd """
+# Bnd 5.2.0 will automatically include the archiveClassifier in the generated Bundle-SymbolicName.
+Bundle-SymbolicName: '\${task.archiveBaseName}-\${task.archiveClassifier}'
+Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+"""
+}
+
+
+def resolve = tasks.register('resolve', Resolve) {
+    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    bndrun = 'test.bndrun'
+}
+
+def testOSGi = tasks.register('testOSGi', TestOSGi) {
+    dependsOn resolve
+    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    bndrun = 'test.bndrun'
+}
+
+tasks.named('check') {
+    dependsOn resolve, testOSGi
+}
+
+artifacts {
+    archives testingBundle.flatMap { it.archiveFile }
+}

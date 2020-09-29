@@ -37,9 +37,8 @@ quasar {
 }
 
 repositories {
-    mavenCentral()
     maven {
-        url 'https://software.r3.com/artifactory/corda-dependencies-dev'
+        url "$artifactory_contextUrl/corda-dependencies-dev"
     }
 }
 

@@ -10,6 +10,7 @@ pluginManagement {
         id 'biz.aQute.bnd.builder' version bnd_version
         id 'org.jetbrains.kotlin.jvm' version kotlin_version
         id 'net.corda.plugins.quasar-utils' version corda_plugins_version
+        id 'net.corda.plugins.cordapp-cpk' version corda_plugins_version
         id 'com.gradle.enterprise' version '3.4.1'
     }
 }
@@ -26,6 +27,7 @@ include 'kotlin'
 include 'logback'
 include 'logging'
 include 'quasar'
+include 'cordapp'
 
 gradleEnterprise {
     buildScan {
