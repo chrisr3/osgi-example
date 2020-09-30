@@ -1,6 +1,3 @@
-import aQute.bnd.gradle.Bundle
-import aQute.bnd.gradle.Resolve
-
 plugins {
     id 'biz.aQute.bnd.builder'
     id 'org.jetbrains.kotlin.jvm'

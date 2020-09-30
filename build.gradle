@@ -8,6 +8,13 @@ plugins {
 }
 
 subprojects {
+    buildscript {
+        configurations.classpath {
+            // Ensure we find the latest SNAPSHOTs of the plugins.
+            resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+        }
+    }
+
     group 'com.example.osgi'
     version = '1.0.0-SNAPSHOT'
 
