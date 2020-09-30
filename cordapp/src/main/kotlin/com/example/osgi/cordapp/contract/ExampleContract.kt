@@ -1,5 +1,6 @@
 package com.example.osgi.cordapp.contract
 
+import com.google.common.collect.ImmutableList
 import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
 import net.corda.core.contracts.ContractState
@@ -11,6 +12,8 @@ import java.security.PublicKey
 
 @Suppress("unused")
 class ExampleContract : Contract {
+    private val extraStuff = ImmutableList.of("one", "two", "three")
+
     override fun verify(tx: LedgerTransaction) {
         val cryptoData = tx.outputsOfType<CryptoState>()
         val validators = tx.commandsOfType<Validate>()
@@ -34,7 +37,7 @@ class ExampleContract : Contract {
     }
 
     class Validate(
-            val schemeCodeName: String,
-            val publicKey: PublicKey
+        val schemeCodeName: String,
+        val publicKey: PublicKey
     ) : CommandData
 }
