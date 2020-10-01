@@ -1,4 +1,5 @@
 import aQute.bnd.gradle.Bundle
+import aQute.bnd.gradle.Export
 import aQute.bnd.gradle.Resolve
 import aQute.bnd.gradle.TestOSGi
 
@@ -115,6 +116,7 @@ dependencies {
 def jar = tasks.named('jar', Jar)
 
 tasks.named('test', Test) {
+    // Our JUnit tests run inside the OSGi framework.
     enabled = false
 }
 
@@ -130,7 +132,6 @@ Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons
 """
 }
 
-
 def resolve = tasks.register('resolve', Resolve) {
     dependsOn jar, testingBundle
     bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
@@ -143,8 +144,21 @@ def testOSGi = tasks.register('testOSGi', TestOSGi) {
     bndrun = 'test.bndrun'
 }
 
+def resolveMain = tasks.register('resolveMain', Resolve) {
+    dependsOn jar
+    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    bndrun = 'main.bndrun'
+}
+
+tasks.register('export', Export) {
+    dependsOn resolveMain
+    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    exporter = 'bnd.runbundles'
+    bndrun = 'main.bndrun'
+}
+
 tasks.named('check') {
-    dependsOn resolve, testOSGi
+    dependsOn resolveMain, testOSGi
 }
 
 artifacts {
