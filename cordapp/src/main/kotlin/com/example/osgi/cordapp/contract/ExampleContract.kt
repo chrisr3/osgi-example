@@ -8,11 +8,24 @@ import net.corda.core.crypto.Crypto
 import net.corda.core.identity.AbstractParty
 import net.corda.core.transactions.LedgerTransaction
 import net.corda.core.utilities.OpaqueBytes
+import org.osgi.service.component.annotations.Activate
+import org.osgi.service.component.annotations.Component
+import org.osgi.service.component.annotations.Reference
+import org.osgi.service.log.Logger
+import org.osgi.service.log.LoggerFactory
 import java.security.PublicKey
 
 @Suppress("unused")
-class ExampleContract : Contract {
+@Component(immediate = true)
+class ExampleContract @Activate constructor(
+    @Reference(service = LoggerFactory::class)
+    private val logger: Logger
+) : Contract {
     private val extraStuff = ImmutableList.of("one", "two", "three")
+
+    init {
+        logger.info("CORDA Started {}", this::class.java)
+    }
 
     override fun verify(tx: LedgerTransaction) {
         val cryptoData = tx.outputsOfType<CryptoState>()

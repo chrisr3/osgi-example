@@ -13,7 +13,7 @@
     co.paralleluniverse.common.resource;version='${project.quasarVersion}',\
     co.paralleluniverse.common.asm;version='${project.quasarVersion}',\
     kotlin.streams.jdk8,\
-    kotlin.jdk7, \
+    kotlin.jdk7,\
     sun.security.x509,\
     sun.management,\
     sun.misc
@@ -76,6 +76,7 @@
 	org.apache.felix.configadmin;version='[1.9.18,1.9.19)',\
 	org.apache.felix.log;version='[1.2.2,1.2.3)',\
 	org.apache.felix.logback;version='[1.0.2,1.0.3)',\
+	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
 	org.apache.servicemix.bundles.antlr;version='[2.7.7,2.7.8)',\
 	org.apache.servicemix.bundles.dom4j;version='[2.1.1,2.1.2)',\
 	org.apache.servicemix.specs.stax-api-1.0;version='[1.9.0,1.9.1)',\
@@ -89,4 +90,8 @@
 	org.objenesis;version='[2.5.1,2.5.2)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.service.cm;version='[1.6.0,1.6.1)',\
+	org.osgi.test.common;version='[0.9.0,0.9.1)',\
+	org.osgi.test.junit5;version='[0.9.0,0.9.1)',\
+	org.osgi.util.function;version='[1.1.0,1.1.1)',\
+	org.osgi.util.promise;version='[1.1.1,1.1.2)',\
 	slf4j.api;version='[1.7.30,1.7.31)'
