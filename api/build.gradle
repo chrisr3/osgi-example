@@ -16,6 +16,7 @@ configurations {
 
 dependencies {
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 tasks.named('jar', Jar) {

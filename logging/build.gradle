@@ -18,6 +18,7 @@ dependencies {
     compileOnly "org.osgi:osgi.core:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
     api "org.osgi:org.osgi.service.log:$osgi_log_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "org.slf4j:slf4j-api:$slf4j_version"
 }
 

@@ -32,7 +32,7 @@ subprojects {
             languageVersion = '1.4'
             apiVersion = '1.4'
             jvmTarget = VERSION_1_8
-            freeCompilerArgs = ['-Xjvm-default=enable']
+            freeCompilerArgs = ['-Xjvm-default=all']
             //allWarningsAsErrors = true
         }
     }
