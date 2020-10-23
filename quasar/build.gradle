@@ -127,5 +127,5 @@ tasks.named('check') {
 }
 
 artifacts {
-    archives testingBundle.flatMap { it.archiveFile }
+    archives testingBundle
 }

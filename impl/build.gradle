@@ -99,6 +99,6 @@ tasks.named('check') {
 }
 
 artifacts {
-    archives testingBundle.flatMap { it.archiveFile }
-    testArtifacts testingBundle.flatMap { it.archiveFile }
+    archives testingBundle
+    testArtifacts testingBundle
 }
