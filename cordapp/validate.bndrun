@@ -1,35 +1,11 @@
 # Bndrun for OSGi CorDapp testing
 
--tester: biz.aQute.tester.junit-platform
+-runee: JavaSE-11
 
--runee: JavaSE-1.8
--runvm: "-javaagent:${project.configurations.quasarAgent.singleFile}${project.quasar.options}",\
-        -Dco.paralleluniverse.fibers.verifyInstrumentation
--runpath: \
-    org.jetbrains.kotlin.osgi-bundle;version='${project.kotlin_version}',\
-    ${project.kotlinJars}
--runsystempackages: \
-    co.paralleluniverse.fibers.instrument;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.resource;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.asm;version='${project.quasarVersion}',\
-    kotlin.streams.jdk8,\
-    kotlin.jdk7,\
-    sun.security.x509,\
-    sun.management,\
-    sun.misc
--runfw: org.apache.felix.framework
--resolve.effective: active
--runproperties: \
-    org.osgi.framework.bootdelegation=sun.reflect,\
-    org.osgi.service.log.admin.loglevel=DEBUG,\
-    logback.configurationFile=${fileuri;${.}/logback.xml}
+-runfw: com.example.osgi.framework.stub
 
 -runrequires: \
-    bnd.identity;id='com.example.osgi.cordapp',\
-    bnd.identity;id='org.osgi.service.cm',\
-    bnd.identity;id='org.apache.felix.configadmin',\
-    bnd.identity;id='org.apache.felix.logback',\
-    bnd.identity;id='org.apache.felix.log'
+    bnd.identity;id=${task.cordappSymbolicName}
 
 # This will help us keep -runbundles sorted
 -runstartlevel: \
@@ -39,10 +15,10 @@
 # The version ranges will change as the versions of
 # the artifacts and/or their dependencies change.
 -runbundles: \
+	activation.osgi;version='[1.1.0,1.1.1)',\
 	bcprov;version='[1.66.0,1.66.1)',\
-	ch.qos.logback.classic;version='[1.2.3,1.2.4)',\
-	ch.qos.logback.core;version='[1.2.3,1.2.4)',\
 	co.paralleluniverse.quasar-core;version='[0.7.14,0.7.15)',\
+	co.paralleluniverse.quasar-core.agent;version='[0.7.14,0.7.15)',\
 	com.esotericsoftware.kryo;version='[4.0.2,4.0.3)',\
 	com.esotericsoftware.minlog;version='[1.3.0,1.3.1)',\
 	com.esotericsoftware.reflectasm;version='[1.11.3,1.11.4)',\
@@ -64,10 +40,6 @@
 	net.corda.core;version='[4.7.0,4.7.1)',\
 	net.i2p.crypto.eddsa;version='[0.3.0,0.3.1)',\
 	org.apache.commons.lang3;version='[3.9.0,3.9.1)',\
-	org.apache.felix.configadmin;version='[1.9.18,1.9.19)',\
-	org.apache.felix.log;version='[1.2.2,1.2.3)',\
-	org.apache.felix.logback;version='[1.0.2,1.0.3)',\
-	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
 	org.apache.servicemix.bundles.antlr;version='[2.7.7,2.7.8)',\
 	org.apache.servicemix.bundles.dom4j;version='[2.1.1,2.1.2)',\
 	org.apache.servicemix.specs.stax-api-1.0;version='[1.9.0,1.9.1)',\
@@ -76,10 +48,8 @@
 	org.jboss.jandex;version='[2.0.5,2.0.6)',\
 	org.jboss.logging.jboss-logging;version='[3.3.2,3.3.3)',\
 	org.jboss.spec.javax.transaction.jboss-transaction-api_1.2_spec;version='[1.1.1,1.1.2)',\
+	org.jetbrains.kotlin.osgi-bundle;version='[1.4.10,1.4.11)',\
 	org.jsr-305;version='[3.0.2,3.0.3)',\
 	org.objectweb.asm;version='[5.0.4,5.0.5)',\
 	org.objenesis;version='[2.5.1,2.5.2)',\
-	org.osgi.service.cm;version='[1.6.0,1.6.1)',\
-	org.osgi.util.function;version='[1.1.0,1.1.1)',\
-	org.osgi.util.promise;version='[1.1.1,1.1.2)',\
 	slf4j.api;version='[1.7.30,1.7.31)'

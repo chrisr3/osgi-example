@@ -62,6 +62,7 @@ configurations {
     }
 
     testCompileOnly.extendsFrom compileOnly
+    cordaTestFramework
 
     [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
         cfg.resolutionStrategy {
@@ -97,6 +98,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junit_platform_version"
+
+    cordaTestFramework project(':framework-stub')
 
     testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
@@ -143,21 +146,30 @@ def testOSGi = tasks.register('testOSGi', TestOSGi) {
     bndrun = 'test.bndrun'
 }
 
-def resolveMain = tasks.register('resolveMain', Resolve) {
-    dependsOn jar
-    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
-    bndrun = 'main.bndrun'
+def validate = tasks.register('validate', Resolve) {
+    dependsOn project(':framework-stub').tasks.named('jar', Jar)
+
+    ext {
+        cordappSymbolicName = 'com.example.osgi.cordapp'
+    }
+
+    bundles = files(sourceSets.main.runtimeClasspath, jar, configurations.cordaProvided.files, configurations.cordaTestFramework.files)
+    bndrun = 'validate.bndrun'
+}
+
+tasks.named('cpk') {
+    dependsOn validate
 }
 
 tasks.register('export', Export) {
-    dependsOn resolveMain
-    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    dependsOn validate
+    bundles = files(sourceSets.test.runtimeClasspath, jar, configurations.cordaProvided.files)
     exporter = 'bnd.runbundles'
-    bndrun = 'main.bndrun'
+    bndrun = 'validate.bndrun'
 }
 
 tasks.named('check') {
-    dependsOn resolveMain, testOSGi
+    dependsOn validate, testOSGi
 }
 
 artifacts {

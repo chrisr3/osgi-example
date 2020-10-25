@@ -1,6 +1,7 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
+        mavenLocal()
         maven {
             url 'https://software.r3.com/artifactory/corda-dev'
         }
@@ -28,6 +29,7 @@ include 'logback'
 include 'logging'
 include 'quasar'
 include 'cordapp'
+include 'framework-stub'
 
 gradleEnterprise {
     buildScan {
