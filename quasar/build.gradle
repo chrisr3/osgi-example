@@ -83,7 +83,6 @@ dependencies {
     osgiTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.service.cm:$osgi_cm_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
 
