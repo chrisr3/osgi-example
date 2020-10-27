@@ -6,9 +6,9 @@
 -runvm: "-javaagent:${project.configurations.quasarAgent.singleFile}${project.quasar.options}",\
         -Dco.paralleluniverse.fibers.verifyInstrumentation
 -runsystempackages: \
-    co.paralleluniverse.fibers.instrument;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.resource;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.asm;version='${project.quasarVersion}',\
+    co.paralleluniverse.fibers.instrument;version=${project.quasarVersion},\
+    co.paralleluniverse.common.resource;version=${project.quasarVersion},\
+    co.paralleluniverse.common.asm;version=${project.quasarVersion},\
     sun.management,\
     sun.misc
 -runfw: org.apache.felix.framework

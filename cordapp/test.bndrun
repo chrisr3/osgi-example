@@ -6,12 +6,12 @@
 -runvm: "-javaagent:${project.configurations.quasarAgent.singleFile}${project.quasar.options}",\
         -Dco.paralleluniverse.fibers.verifyInstrumentation
 -runpath: \
-    org.jetbrains.kotlin.osgi-bundle;version='${project.kotlin_version}',\
+    org.jetbrains.kotlin.osgi-bundle;version=${project.kotlin_version},\
     ${project.kotlinJars}
 -runsystempackages: \
-    co.paralleluniverse.fibers.instrument;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.resource;version='${project.quasarVersion}',\
-    co.paralleluniverse.common.asm;version='${project.quasarVersion}',\
+    co.paralleluniverse.fibers.instrument;version=${project.quasarVersion},\
+    co.paralleluniverse.common.resource;version=${project.quasarVersion},\
+    co.paralleluniverse.common.asm;version=${project.quasarVersion},\
     kotlin.streams.jdk8,\
     kotlin.jdk7,\
     sun.security.x509,\

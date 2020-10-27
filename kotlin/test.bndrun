@@ -7,7 +7,7 @@
 -resolve.effective: active
 
 -runpath: \
-    org.jetbrains.kotlin.osgi-bundle;version='${project.kotlin_version}',\
+    org.jetbrains.kotlin.osgi-bundle;version=${project.kotlin_version},\
     ${project.kotlinJars}
 -runsystempackages: kotlin.jdk7, kotlin.streams.jdk8
 
