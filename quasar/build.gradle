@@ -59,7 +59,6 @@ configurations {
                 substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
                 substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
             }
-            cacheChangingModulesFor 0, 'seconds'
         }
     }
 }
@@ -83,6 +82,7 @@ dependencies {
     osgiTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    osgiTestRuntimeOnly "org.apache.felix:org.apache.felix.configadmin:$felix_configadmin_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
     osgiTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
 

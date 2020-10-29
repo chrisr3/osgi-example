@@ -30,6 +30,7 @@
     bnd.identity;id='junit-jupiter-engine',\
     bnd.identity;id='junit-platform-launcher',\
     bnd.identity;id='org.apache.felix.configadmin',\
+    bnd.identity;id='org.apache.felix.metatype',\
     bnd.identity;id='org.apache.felix.logback',\
     bnd.identity;id='org.apache.felix.log'
 
@@ -75,6 +76,7 @@
 	org.apache.felix.configadmin;version='[1.9.18,1.9.19)',\
 	org.apache.felix.log;version='[1.2.2,1.2.3)',\
 	org.apache.felix.logback;version='[1.0.2,1.0.3)',\
+	org.apache.felix.metatype;version='[1.2.2,1.2.3)',\
 	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
 	org.apache.servicemix.bundles.antlr;version='[2.7.7,2.7.8)',\
 	org.apache.servicemix.bundles.dom4j;version='[2.1.1,2.1.2)',\

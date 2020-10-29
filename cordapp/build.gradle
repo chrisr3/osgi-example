@@ -103,6 +103,7 @@ dependencies {
 
     testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
+    testRuntimeOnly "org.apache.felix:org.apache.felix.metatype:$felix_metatype_version"
     testRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
     testRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
 
