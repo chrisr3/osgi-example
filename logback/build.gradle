@@ -31,7 +31,6 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     testRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    testRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
 
     // OSGi Logging Service, implemented by Felix and consumed by Logback.
     testRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"

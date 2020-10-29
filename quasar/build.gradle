@@ -47,7 +47,7 @@ sourceSets {
 }
 
 configurations {
-    osgiTestApi.extendsFrom api
+    testCompileOnly.extendsFrom compileOnly
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
     osgiTestRuntimeOnly.extendsFrom cordaRuntimeOnly
@@ -65,11 +65,11 @@ configurations {
 
 dependencies {
     api project(':api')
-    api "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
 
     testImplementation project(':logging')
@@ -89,7 +89,6 @@ dependencies {
     // Basic SLF4J back-end
     osgiTestRuntimeOnly project(':logging')
     osgiTestRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
-    osgiTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
 }
 
 tasks.named('jar', Jar) {

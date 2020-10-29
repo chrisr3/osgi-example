@@ -55,14 +55,12 @@ dependencies {
     integrationTestRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.framework:$felix_version"
     integrationTestRuntimeOnly "org.apache.felix:org.apache.felix.scr:$felix_scr_version"
-    integrationTestRuntimeOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.util.function:$osgi_util_function_version"
     integrationTestRuntimeOnly "org.osgi:org.osgi.util.promise:$osgi_util_promise_version"
 
     // Basic SLF4J back-end
     integrationTestRuntimeOnly project(':logging')
     integrationTestRuntimeOnly "org.slf4j:slf4j-simple:$slf4j_version"
-    integrationTestRuntimeOnly "org.osgi:org.osgi.util.pushstream:$osgi_util_pushstream_version"
 }
 
 tasks.named('jar', Jar) {
