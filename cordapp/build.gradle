@@ -41,7 +41,7 @@ quasar {
 repositories {
     mavenLocal()
     maven {
-        url "$artifactory_contextUrl/corda-dependencies-dev"
+        url "$artifactory_contextUrl/corda-dependencies"
     }
     maven {
         url 'https://repository.mulesoft.org/nexus/content/repositories/public'
@@ -75,7 +75,7 @@ configurations {
 }
 
 ext {
-    quasarVersion = '0.7.14.r3-SNAPSHOT'
+    quasarVersion = '0.7.14.r3'
 
     kotlinJars = provider {
         configurations.kotlinJar.collect { file -> "$file;version=file" }.join(',')

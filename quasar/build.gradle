@@ -10,7 +10,7 @@ plugins {
 }
 
 ext {
-    quasarVersion = '0.7.14.r3-SNAPSHOT'
+    quasarVersion = '0.7.14.r3'
 }
 
 quasar {
@@ -31,7 +31,7 @@ quasar {
 
 repositories {
     maven {
-        url "$artifactory_contextUrl/corda-dependencies-dev"
+        url "$artifactory_contextUrl/corda-dependencies"
     }
 }
 

@@ -5,7 +5,7 @@ plugins {
 
 repositories {
     maven {
-        url "$artifactory_contextUrl/corda-dependencies-dev"
+        url "$artifactory_contextUrl/corda-dependencies"
     }
 }
 
