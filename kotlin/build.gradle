@@ -12,13 +12,6 @@ configurations {
     kotlinJar {
         transitive = false
     }
-    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
-        cfg.resolutionStrategy {
-            dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-            }
-        }
-    }
 }
 
 ext {
@@ -29,7 +22,14 @@ ext {
 
 dependencies {
     api "org.osgi:osgi.annotation:$osgi_version"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
+        transitive = false
+    }
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
+        transitive = false
+    }
 
     kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

@@ -4,19 +4,10 @@ plugins {
     id 'java-library'
 }
 
-configurations {
-    [ runtimeClasspath, testRuntimeClasspath ].forEach { cfg ->
-        cfg.resolutionStrategy {
-            dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-            }
-        }
-    }
-}
-
 dependencies {
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    api "org.jetbrains:annotations:$jetbrains_annotations_version"
 }
 
 tasks.named('jar', Jar) {

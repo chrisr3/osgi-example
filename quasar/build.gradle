@@ -51,24 +51,22 @@ configurations {
     osgiTestCompileOnly.extendsFrom compileOnly
     osgiTestImplementation.extendsFrom implementation
     osgiTestRuntimeOnly.extendsFrom cordaRuntimeOnly
-
-    [ runtimeClasspath, testRuntimeClasspath, osgiTestRuntimeClasspath ].forEach { cfg ->
-        cfg.resolutionStrategy {
-            dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-common') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-            }
-        }
-    }
 }
 
 dependencies {
     api project(':api')
+    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
+        transitive = false
+    }
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
+        transitive = false
+    }
+    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
 
-    compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
 

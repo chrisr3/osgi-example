@@ -25,19 +25,12 @@ configurations {
     integrationTestApi.extendsFrom testApi
     integrationTestCompileOnly.extendsFrom testCompileOnly
     integrationTestImplementation.extendsFrom testImplementation
-
-    [ runtimeClasspath, testRuntimeClasspath, integrationTestRuntimeClasspath ].forEach { cfg ->
-        cfg.resolutionStrategy {
-            dependencySubstitution {
-                substitute module('org.jetbrains.kotlin:kotlin-stdlib-jdk8') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-                substitute module('org.jetbrains.kotlin:kotlin-reflect') with module("org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version")
-            }
-        }
-    }
 }
 
 dependencies {
     api project(':api')
+    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
 
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
