@@ -6,11 +6,6 @@
 -runfw: org.apache.felix.framework
 -resolve.effective: active
 
--runpath: \
-    org.jetbrains.kotlin.osgi-bundle;version=${project.kotlin_version},\
-    ${project.kotlinJars}
--runsystempackages: kotlin.jdk7, kotlin.streams.jdk8
-
 -runproperties: \
     org.osgi.framework.bootdelegation=sun.reflect
 -runrequires: \
@@ -34,4 +29,5 @@
 	junit-platform-commons;version='[1.6.2,1.6.3)',\
 	junit-platform-engine;version='[1.6.2,1.6.3)',\
 	junit-platform-launcher;version='[1.6.2,1.6.3)',\
+	net.corda.org.jetbrains.kotlin;version='[1.4.10,1.4.11)',\
 	org.opentest4j;version='[1.2.0,1.2.1)'

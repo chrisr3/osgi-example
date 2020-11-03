@@ -12,27 +12,12 @@ configurations {
     kotlinJar {
         transitive = false
     }
-}
-
-ext {
-    kotlinJars = provider {
-        configurations.kotlinJar.collect { file -> "$file;version=file" }.join(',')
-    }
+    testCompileOnly.extendsFrom compileOnly
 }
 
 dependencies {
     api "org.osgi:osgi.annotation:$osgi_version"
-    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
-    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
-        transitive = false
-    }
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
-        transitive = false
-    }
-
-    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':kotlin-bundle')
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"

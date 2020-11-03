@@ -1,0 +1,44 @@
+plugins {
+    id 'biz.aQute.bnd.builder'
+}
+
+configurations {
+    bundle
+}
+
+dependencies {
+    bundle "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    bundle("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
+        transitive = false
+    }
+    bundle("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
+        transitive = false
+    }
+    bundle "org.jetbrains:annotations:$jetbrains_annotations_version"
+}
+
+tasks.named('jar', Jar) {
+    archiveVersion = kotlin_version
+    archiveBaseName = 'corda-kotlin'
+
+    def kotlinProvider = project.provider {
+        Collection<File> artifacts = configurations.bundle.files
+        if (artifacts.isEmpty()) {
+            return ""
+        } else {
+            StringJoiner resources = new StringJoiner(',', '-includeresource:', System.lineSeparator)
+            for (File artifact : artifacts) {
+                resources.add("@${artifact.toURI()}".toString())
+            }
+            return resources.toString()
+        }
+    }
+
+    bnd """\
+-fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
+Bundle-SymbolicName: net.corda.org.jetbrains.kotlin
+Bundle-Name: Kotlin for Corda
+Export-Package: *
+"""
+    bnd kotlinProvider
+}
