@@ -12,7 +12,11 @@
     co.paralleluniverse.fibers.instrument;version=${project.quasarVersion},\
     co.paralleluniverse.common.resource;version=${project.quasarVersion},\
     co.paralleluniverse.common.asm;version=${project.quasarVersion},\
+    kotlin.collections.jdk8,\
+    kotlin.random.jdk8,\
     kotlin.streams.jdk8,\
+    kotlin.text.jdk8,\
+    kotlin.time.jdk8,\
     kotlin.jdk7,\
     sun.security.x509,\
     sun.management,\
