@@ -1,17 +1,7 @@
 pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-        maven {
-            url 'https://software.r3.com/artifactory/corda-dev'
-        }
-    }
-
     plugins {
         id 'biz.aQute.bnd.builder' version bnd_version
         id 'org.jetbrains.kotlin.jvm' version kotlin_version
-        id 'net.corda.plugins.quasar-utils' version corda_plugins_version
-        id 'net.corda.plugins.cordapp-cpk' version corda_plugins_version
         id 'com.gradle.enterprise' version '3.4.1'
     }
 }
@@ -24,12 +14,7 @@ rootProject.name = 'OSGi example'
 
 include 'api'
 include 'impl'
-include 'kotlin'
-include 'logback'
 include 'logging'
-include 'quasar'
-include 'cordapp'
-include 'framework-stub'
 
 gradleEnterprise {
     buildScan {
