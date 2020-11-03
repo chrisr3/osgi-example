@@ -10,8 +10,7 @@ plugins {
 dependencies {
     implementation project(':api')
     implementation project(':impl')
-    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+    implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
 
     testImplementation project(path: ':impl', configuration: 'testArtifacts')
     testImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"

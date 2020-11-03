@@ -8,16 +8,9 @@ plugins {
     id 'java-library'
 }
 
-configurations {
-    kotlinJar {
-        transitive = false
-    }
-    testCompileOnly.extendsFrom compileOnly
-}
-
 dependencies {
     api "org.osgi:osgi.annotation:$osgi_version"
-    implementation project(':kotlin-bundle')
+    implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junit_jupiter_version"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junit_jupiter_version"

@@ -52,10 +52,6 @@ repositories {
 }
 
 configurations {
-    kotlinJar {
-        transitive = false
-    }
-
     all {
         resolutionStrategy {
             dependencySubstitution {
@@ -70,28 +66,14 @@ configurations {
 
 ext {
     quasarVersion = '0.7.14.r3'
-
-    kotlinJars = provider {
-        configurations.kotlinJar.collect { file -> "$file;version=file" }.join(',')
-    }
 }
 
 dependencies {
-    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    kotlinJar "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
     compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     cordaProvided "net.corda:corda-core:$corda_version"
     cordaProvided "javax.activation:activation.osgi:1.1"
-    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
-        transitive = false
-    }
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
-        transitive = false
-    }
-    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+    implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
     implementation "com.google.guava:guava:$guava_version"
 
     testImplementation "org.osgi:org.osgi.test.junit5:$osgi_test_junit5_version"
@@ -135,13 +117,18 @@ Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons
 
 def resolve = tasks.register('resolve', Resolve) {
     dependsOn jar, testingBundle
-    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+    bundles = files(sourceSets.test.runtimeClasspath, configurations.cordaProvided, configurations.archives.artifacts.files)
     bndrun = 'test.bndrun'
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
-    bundles = sourceSets.test.runtimeClasspath + configurations.cordaProvided.files + configurations.archives.artifacts.files
+
+    ext {
+        cordappSymbolicName = 'com.example.osgi.cordapp'
+    }
+
+    bundles = files(sourceSets.test.runtimeClasspath, configurations.cordaProvided, configurations.archives.artifacts.files)
     bndrun = 'test.bndrun'
 }
 
@@ -152,7 +139,7 @@ def validate = tasks.register('validate', Resolve) {
         cordappSymbolicName = 'com.example.osgi.cordapp'
     }
 
-    bundles = files(sourceSets.main.runtimeClasspath, jar, configurations.cordaProvided.files, configurations.cordaTestFramework.files)
+    bundles = files(sourceSets.main.runtimeClasspath, jar, configurations.cordaProvided, configurations.cordaTestFramework)
     bndrun = 'validate.bndrun'
 }
 
@@ -162,7 +149,7 @@ tasks.named('cpk') {
 
 tasks.register('export', Export) {
     dependsOn validate
-    bundles = files(sourceSets.test.runtimeClasspath, jar, configurations.cordaProvided.files)
+    bundles = files(sourceSets.test.runtimeClasspath, jar, configurations.quasarAgent, configurations.cordaProvided)
     exporter = 'bnd.runbundles'
     bndrun = 'validate.bndrun'
 }

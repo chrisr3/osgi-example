@@ -1,0 +1,20 @@
+pluginManagement {
+    repositories {
+        maven {
+            url 'https://software.r3.com/artifactory/corda-dev'
+        }
+        gradlePluginPortal()
+    }
+
+    plugins {
+        id 'biz.aQute.bnd.builder' version bnd_version
+        id 'org.jetbrains.kotlin.jvm' version kotlin_version
+        id 'com.jfrog.artifactory' version artifactory_version
+        id 'net.corda.plugins.publish-utils' version publish_utils_version
+    }
+}
+
+rootProject.name = 'Kotlin OSGi Bundles'
+
+include 'kotlin-stdlib-jdk7-osgi'
+include 'kotlin-stdlib-jdk8-osgi'

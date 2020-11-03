@@ -20,6 +20,9 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven {
+            url "$artifactory_contextUrl/corda-dependencies-dev"
+        }
     }
 
     configurations {

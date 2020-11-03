@@ -30,7 +30,6 @@ include 'logging'
 include 'quasar'
 include 'cordapp'
 include 'framework-stub'
-include 'kotlin-bundle'
 
 gradleEnterprise {
     buildScan {

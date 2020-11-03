@@ -29,11 +29,10 @@ configurations {
 
 dependencies {
     api project(':api')
-    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
-    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
+    implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
 
-    compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:osgi.core:$osgi_version"
+    compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
     compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
     implementation "org.bouncycastle:bcprov-jdk15on:$bouncycastle_version"

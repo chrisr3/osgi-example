@@ -55,14 +55,7 @@ configurations {
 
 dependencies {
     api project(':api')
-    implementation "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
-        transitive = false
-    }
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
-        transitive = false
-    }
-    implementation "org.jetbrains:annotations:$jetbrains_annotations_version"
+    implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
     implementation "com.esotericsoftware:kryo:4.0.2"
 
     compileOnly "org.osgi:osgi.core:$osgi_version"

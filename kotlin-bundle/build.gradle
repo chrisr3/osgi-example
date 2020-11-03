@@ -1,44 +1,82 @@
+buildscript {
+    configurations.classpath {
+        // Ensure we find the latest SNAPSHOTs of the plugins.
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+}
+
 plugins {
-    id 'biz.aQute.bnd.builder'
+    id 'net.corda.plugins.publish-utils'
+    id 'com.jfrog.artifactory'
 }
 
-configurations {
-    bundle
-}
+subprojects {
+    group 'net.corda.kotlin'
+    version kotlin_version
 
-dependencies {
-    bundle "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    bundle("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version") {
-        transitive = false
+    repositories {
+        mavenCentral()
     }
-    bundle("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version") {
-        transitive = false
-    }
-    bundle "org.jetbrains:annotations:$jetbrains_annotations_version"
-}
 
-tasks.named('jar', Jar) {
-    archiveVersion = kotlin_version
-    archiveBaseName = 'corda-kotlin'
-
-    def kotlinProvider = project.provider {
-        Collection<File> artifacts = configurations.bundle.files
-        if (artifacts.isEmpty()) {
-            return ""
-        } else {
-            StringJoiner resources = new StringJoiner(',', '-includeresource:', System.lineSeparator)
-            for (File artifact : artifacts) {
-                resources.add("@${artifact.toURI()}".toString())
-            }
-            return resources.toString()
+    configurations {
+        bundle {
+            transitive = false
         }
     }
 
-    bnd """\
--fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
-Bundle-SymbolicName: net.corda.org.jetbrains.kotlin
-Bundle-Name: Kotlin for Corda
-Export-Package: *
+    ext {
+        kotlinProvider = project.provider {
+            String fileURI = configurations.bundle.singleFile.toURI().toString()
+            return """\
+-include: jar:$fileURI!/META-INF/MANIFEST.MF
+-includeresource: @$fileURI
 """
-    bnd kotlinProvider
+        }
+    }
+
+    tasks.withType(GenerateModuleMetadata).configureEach {
+        enabled = false
+    }
+}
+
+bintrayConfig {
+    user = System.getenv('CORDA_BINTRAY_USER')
+    key = System.getenv('CORDA_BINTRAY_KEY')
+    repo = 'corda'
+    org = 'r3'
+    licenses = ['Apache-2.0']
+    vcsUrl = 'https://github.com/corda/kotlin-stdlib-jdk'
+    projectUrl = 'https://github.com/corda/kotlin-stdlib-jdk'
+    gpgSign = true
+    gpgPassphrase = System.getenv('CORDA_BINTRAY_GPG_PASSPHRASE')
+    publications = [
+        'kotlin-stdlib-jdk7-osgi',
+        'kotlin-stdlib-jdk8-osgi'
+    ]
+    license {
+        name = 'Apache-2.0'
+        url = 'https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt'
+        distribution = 'repo'
+    }
+    developer {
+        name = 'JetBrains'
+    }
+}
+
+artifactory {
+    publish {
+        contextUrl = artifactory_contextUrl
+        repository {
+            repoKey = 'corda-dependencies-dev'
+            username = project.findProperty('cordaArtifactoryUsername') ?: System.getenv('CORDA_ARTIFACTORY_USERNAME') ?: System.getProperty('corda.artifactory.username')
+            password = project.findProperty('cordaArtifactoryPassword') ?: System.getenv('CORDA_ARTIFACTORY_APIKEY') ?: System.getProperty('corda.artifactory.password')
+        }
+
+        defaults {
+            // The root project has applied 'publish-utils' but has nothing to publish.
+            if (project != rootProject) {
+                publications(project.extensions.publish.name())
+            }
+        }
+    }
 }

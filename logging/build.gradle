@@ -9,8 +9,7 @@ dependencies {
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
     compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
-    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    api "org.jetbrains:annotations:$jetbrains_annotations_version"
+    api "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
     implementation "org.slf4j:slf4j-api:$slf4j_version"
 }
 

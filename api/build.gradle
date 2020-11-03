@@ -6,8 +6,7 @@ plugins {
 
 dependencies {
     compileOnly "org.osgi:osgi.annotation:$osgi_version"
-    api "org.jetbrains.kotlin:kotlin-osgi-bundle:$kotlin_version"
-    api "org.jetbrains:annotations:$jetbrains_annotations_version"
+    api "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
 }
 
 tasks.named('jar', Jar) {
