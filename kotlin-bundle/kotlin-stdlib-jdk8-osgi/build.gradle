@@ -24,13 +24,6 @@ def jar = tasks.named('jar', Jar) {
 -fixupmessages "Classes found in the wrong directory"; restrict:=error; is:=warning
 Bundle-SymbolicName: net.corda.kotlin-stdlib-jdk8.osgi-bundle
 Bundle-Name: Kotlin JDK8 classes
-Export-Package: \
-    kotlin.collections.jdk8,\
-    kotlin.internal.jdk8,\
-    kotlin.random.jdk8,\
-    kotlin.streams.jdk8,\
-    kotlin.text.jdk8,\
-    kotlin.time.jdk8
 """
 }
 

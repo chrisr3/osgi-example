@@ -1,3 +1,6 @@
+import java.util.jar.JarFile
+import static java.util.stream.Collectors.joining
+
 buildscript {
     configurations.classpath {
         // Ensure we find the latest SNAPSHOTs of the plugins.
@@ -8,6 +11,19 @@ buildscript {
 plugins {
     id 'net.corda.plugins.publish-utils'
     id 'com.jfrog.artifactory'
+}
+
+String getPackageNames(File file) {
+    new JarFile(file).withCloseable { jar ->
+        jar.stream()
+           .filter { !it.directory }
+           .map { it.name }
+           .filter { !it.startsWith('META-INF/') }
+           .map { it.substring(0, it.lastIndexOf('/')).replace('/', '.') }
+           .distinct()
+           .sorted()
+           .collect(joining(','))
+    }
 }
 
 subprojects {
@@ -26,10 +42,12 @@ subprojects {
 
     ext {
         kotlinProvider = project.provider {
-            String fileURI = configurations.bundle.singleFile.toURI().toString()
-            return """\
+            File file = configurations.bundle.singleFile
+            String fileURI = file.toURI().toString()
+            """\
 -include: jar:$fileURI!/META-INF/MANIFEST.MF
 -includeresource: @$fileURI
+-exportcontents: ${getPackageNames(file)}
 """
         }
     }
