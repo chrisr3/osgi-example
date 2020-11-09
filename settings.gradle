@@ -1,7 +1,6 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        mavenLocal()
         maven {
             url 'https://software.r3.com/artifactory/corda-dev'
         }

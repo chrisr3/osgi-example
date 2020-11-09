@@ -70,7 +70,7 @@ ext {
 
 dependencies {
     compileOnly "org.osgi:org.osgi.service.component.annotations:$osgi_component_annotations_version"
-    compileOnly "org.osgi:org.osgi.service.log:$osgi_log_version"
+    cordaProvided "org.osgi:org.osgi.service.log:$osgi_log_version"
     cordaProvided "net.corda:corda-core:$corda_version"
     cordaProvided "javax.activation:activation.osgi:1.1"
     implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
