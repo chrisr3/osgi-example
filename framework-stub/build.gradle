@@ -14,6 +14,7 @@ dependencies {
     compileOnly "org.osgi:org.osgi.service.component:$osgi_component_version"
     implementation "co.paralleluniverse:quasar-core-osgi:$quasar_version:agent"
     implementation "net.corda.kotlin:kotlin-stdlib-jdk8-osgi:$kotlin_version"
+    implementation "com.sun.activation:javax.activation:$activation_version"
     implementation "org.slf4j:slf4j-nop:$slf4j_version"
 }
 
