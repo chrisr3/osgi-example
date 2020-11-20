@@ -19,7 +19,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    bnd """
+    bnd """\
 Bundle-Name: OSGi Framework Stub
 Bundle-SymbolicName: com.example.osgi.framework.stub
 Export-Package:\

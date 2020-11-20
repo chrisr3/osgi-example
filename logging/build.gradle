@@ -14,7 +14,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    bnd """
+    bnd """\
 Bundle-Name: OSGi Example SLF4J Logging Bridge
 Bundle-SymbolicName: com.example.osgi.logging
 Export-Package: org.osgi.service.log

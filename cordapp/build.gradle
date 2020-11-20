@@ -108,7 +108,7 @@ def testingBundle = tasks.register('testingBundle', Bundle) {
     from sourceSets.test.output
     sourceSet = sourceSets.test
 
-    bnd """
+    bnd """\
 Bundle-SymbolicName: \${task.archiveBaseName}-\${task.archiveClassifier}
 Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 """

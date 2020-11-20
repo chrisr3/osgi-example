@@ -19,7 +19,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    bnd """
+    bnd """\
 Bundle-SymbolicName: com.example.osgi.kotlin
 Bundle-Name: OSGi Example with Kotlin
 """
@@ -30,7 +30,7 @@ def testBundle = tasks.register('testBundle', Bundle) {
     from sourceSets.test.output
     sourceSet = sourceSets.test
 
-    bnd """
+    bnd """\
 Bundle-SymbolicName: com.example.osgi.kotlin.test
 Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 """

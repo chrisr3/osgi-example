@@ -10,7 +10,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-    bnd """
+    bnd """\
 Bundle-Name: OSGi Example Api
 Bundle-SymbolicName: com.example.osgi.api
 """

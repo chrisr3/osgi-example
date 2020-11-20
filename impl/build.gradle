@@ -56,7 +56,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar) {
-   bnd """
+   bnd """\
 Bundle-Name: OSGi Example Impl
 Bundle-SymbolicName: com.example.osgi.impl
 """
@@ -67,7 +67,7 @@ def testingBundle = tasks.register('testingBundle', Bundle) {
     from sourceSets.integrationTest.output
     sourceSet = sourceSets.integrationTest
 
-    bnd """
+    bnd """\
 Bundle-SymbolicName: \${task.archiveBaseName}-\${task.archiveClassifier}
 Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 """
