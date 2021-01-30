@@ -101,13 +101,13 @@ Test-Cases: \${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons
 }
 
 def resolve = tasks.register('resolve', Resolve) {
-    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
+    bundles = files(sourceSets.osgiTest.runtimeClasspath, configurations.archives.artifacts.files)
     bndrun = 'test.bndrun'
 }
 
 def testOSGi = tasks.register('testOSGi', TestOSGi) {
     dependsOn resolve
-    bundles = sourceSets.osgiTest.runtimeClasspath + configurations.archives.artifacts.files
+    bundles = files(sourceSets.osgiTest.runtimeClasspath, configurations.archives.artifacts.files)
     bndrun = 'test.bndrun'
 }
 
