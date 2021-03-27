@@ -39,7 +39,7 @@
 	junit-platform-engine;version='[1.7.1,1.7.2)',\
 	junit-platform-launcher;version='[1.7.1,1.7.2)',\
 	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
-	org.jetbrains.kotlin.osgi-bundle;version='[1.4.31,1.4.32)',\
+	org.jetbrains.kotlin.osgi-bundle;version='[1.4.32,1.4.33)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.test.common;version='[0.9.0,0.9.1)',\
 	org.osgi.test.junit5;version='[0.9.0,0.9.1)',\

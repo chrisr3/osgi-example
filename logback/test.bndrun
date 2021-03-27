@@ -42,7 +42,7 @@
 	org.apache.felix.log;version='[1.2.2,1.2.3)',\
 	org.apache.felix.logback;version='[1.0.2,1.0.3)',\
 	org.apache.felix.scr;version='[2.1.20,2.1.21)',\
-	org.jetbrains.kotlin.osgi-bundle;version='[1.4.31,1.4.32)',\
+	org.jetbrains.kotlin.osgi-bundle;version='[1.4.32,1.4.33)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\
 	org.osgi.test.common;version='[0.9.0,0.9.1)',\
 	org.osgi.test.junit5;version='[0.9.0,0.9.1)',\
